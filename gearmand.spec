@@ -1,5 +1,5 @@
 Name:           gearmand
-Version:        0.5
+Version:        0.6
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -123,6 +123,9 @@ fi
 
 
 %changelog
+* Wed May 20 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.6-1
+- Upstream released new version
+
 * Mon Apr 27 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.5-1
 - Upstream released new version
 - Cleanups for review (bz #487148)
