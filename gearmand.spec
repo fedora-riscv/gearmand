@@ -8,6 +8,7 @@ License:        BSD
 URL:            http://www.gearman.org
 Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
 Source1:        gearmand.init
+Source2:	gearmand.sysconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libevent-devel, e2fsprogs-devel
@@ -69,7 +70,9 @@ make %{?_smp_mflags}
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman.la
-install -D %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
+install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
+install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
+mkdir -p %{buildroot}/var/run/gearmand
 
 
 %clean
@@ -101,6 +104,8 @@ fi
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING README
+%dir %attr(755,gearmand,gearmand) /var/run/gearmand
+%config(noreplace) %{_sysconfdir}/sysconfig/gearmand
 %{_sbindir}/gearmand
 %{_bindir}/gearman
 %{_initrddir}/gearmand

@@ -25,10 +25,10 @@ if [ -f /etc/sysconfig/gearmand ]; then
         . /etc/sysconfig/gearmand
 fi
 
-[ -z "${PIDFILE}" ] && pidfile = "/var/run/gearmand/gearmand.pid"
+[ -z "${PIDFILE}" ] && pidfile="/var/run/gearmand/gearmand.pid"
 [ -z "${LOCKFILE}" ] && lockfile="/var/lock/subsys/gearmand"
 
-gearmand=/usr/bin/gearmand
+gearmand=/usr/sbin/gearmand
 prog=gearmand
 
 RETVAL=0
