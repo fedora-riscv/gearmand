@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -128,6 +128,9 @@ fi
 
 
 %changelog
+* Sun May 24 2009 Peter Lemenkov <lemenkov@gmail.com> 0.6-2
+- Fixed issues, reported in https://bugzilla.redhat.com/show_bug.cgi?id=487148#c9
+
 * Wed May 20 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.6-1
 - Upstream released new version
 
