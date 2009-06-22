@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -8,13 +8,13 @@ License:        BSD
 URL:            http://www.gearman.org
 Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
 Source1:        gearmand.init
-Source2:	gearmand.sysconfig
+Source2:        gearmand.sysconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libevent-devel, e2fsprogs-devel
 
-%ifnarch ppc64
-# no google perftools on ppc64
+%ifnarch ppc64 sparc64
+# no google perftools
 BuildRequires: google-perftools-devel
 %endif
 Requires(pre):   %{_sbindir}/useradd
@@ -128,6 +128,9 @@ fi
 
 
 %changelog
+* Mon Jun 22 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.6-3
+- Don't build with tcmalloc on sparc64
+
 * Sun May 24 2009 Peter Lemenkov <lemenkov@gmail.com> 0.6-2
 - Fixed issues, reported in https://bugzilla.redhat.com/show_bug.cgi?id=487148#c9
 
