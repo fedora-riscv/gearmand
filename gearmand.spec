@@ -1,6 +1,6 @@
 Name:           gearmand
-Version:        0.6
-Release:        3%{?dist}
+Version:        0.7
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -18,8 +18,8 @@ BuildRequires:  libevent-devel, e2fsprogs-devel
 BuildRequires: google-perftools-devel
 %endif
 Requires(pre):   %{_sbindir}/useradd
-Requires(post):  /sbin/chkconfig
-Requires(preun): /sbin/service, /sbin/chkconfig
+Requires(post):  chkconfig
+Requires(preun): chkconfig, initscripts
 Requires:        procps
 
 %description
@@ -54,8 +54,8 @@ Development libraries for %{name}
 
 
 %build
-%ifarch ppc64
-# no tcmalloc on ppc64
+%ifarch ppc64 sparc64
+# no tcmalloc
 %configure --disable-static
 %else
 %configure --disable-static --enable-tcmalloc
@@ -70,7 +70,7 @@ make %{?_smp_mflags}
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman.la
-install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
+install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 mkdir -p %{buildroot}/var/run/gearmand
 
@@ -110,6 +110,7 @@ fi
 %{_bindir}/gearman
 %{_initrddir}/gearmand
 %{_mandir}/man1/gearman.1.gz
+%{_mandir}/man8/gearmand.8.gz
 
 
 %files -n libgearman-devel
@@ -128,6 +129,9 @@ fi
 
 
 %changelog
+* Mon Jun 22 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.7-1
+- Upstream released new version
+
 * Mon Jun 22 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.6-3
 - Don't build with tcmalloc on sparc64
 
