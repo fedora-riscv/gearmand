@@ -1,5 +1,5 @@
 Name:           gearmand
-Version:        0.7
+Version:        0.8
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -11,13 +11,13 @@ Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  libevent-devel, e2fsprogs-devel
+BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
 
 %ifnarch ppc64 sparc64
 # no google perftools
 BuildRequires: google-perftools-devel
 %endif
-Requires(pre):   %{_sbindir}/useradd
+Requires(pre):   shadow-utils
 Requires(post):  chkconfig
 Requires(preun): chkconfig, initscripts
 Requires:        procps
@@ -78,6 +78,7 @@ mkdir -p %{buildroot}/var/run/gearmand
 %clean
 rm -rf %{buildroot}
 
+
 %pre
 getent group gearmand >/dev/null || groupadd -r gearmand
 getent passwd gearmand >/dev/null || \
@@ -129,6 +130,10 @@ fi
 
 
 %changelog
+* Tue Jul 14 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.8-1
+- Upstream released new version
+- Enable libmemcached backend
+
 * Mon Jun 22 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.7-1
 - Upstream released new version
 
