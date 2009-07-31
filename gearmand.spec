@@ -1,6 +1,6 @@
 Name:           gearmand
-Version:        0.8
-Release:        2%{?dist}
+Version:        0.9
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -130,6 +130,9 @@ fi
 
 
 %changelog
+* Fri Jul 31 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.9-1
+- Upstream released new version
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.8-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
