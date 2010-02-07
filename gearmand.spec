@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -130,6 +130,9 @@ fi
 
 
 %changelog
+* Sun Feb 07 2010 Remi Collet <fedora@famillecollet.com> - 0.9-2
+- rebuilt against new libmemcached
+
 * Fri Jul 31 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.9-1
 - Upstream released new version
 
