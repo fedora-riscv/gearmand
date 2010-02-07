@@ -1,0 +1,22 @@
+--- m4/pandora_have_libmemcached.m4.orig	2010-02-07 17:19:54.000000000 +0100
++++ m4/pandora_have_libmemcached.m4	2010-02-07 17:20:05.000000000 +0100
+@@ -15,7 +15,7 @@
+   ], [
+     memcached_st memc;
+     memcached_dump_func *df;
+-    memcached_version();
++    memcached_version(NULL);
+   ])
+   
+   AM_CONDITIONAL(HAVE_LIBMEMCACHED, [test "x${ac_cv_libmemcached}" = "xyes"])
+--- configure.orig	2010-02-07 17:23:30.000000000 +0100
++++ configure	2010-02-07 17:23:42.000000000 +0100
+@@ -24161,7 +24161,7 @@
+ 
+     memcached_st memc;
+     memcached_dump_func *df;
+-    memcached_version();
++    memcached_version(NULL);
+ 
+   ;
+   return 0;

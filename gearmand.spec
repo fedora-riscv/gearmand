@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -10,6 +10,8 @@ Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearman
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Patch0:         gearmand-libmemcached.patch
 
 BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
 
@@ -51,6 +53,8 @@ Development libraries for %{name}
 
 %prep
 %setup -q
+
+%patch0 -p0
 
 
 %build
@@ -130,6 +134,9 @@ fi
 
 
 %changelog
+* Sun Feb 07 2010 Remi Collet <fedora@famillecollet.com> - 0.9-3
+- patch to detect libmemcached
+
 * Sun Feb 07 2010 Remi Collet <fedora@famillecollet.com> - 0.9-2
 - rebuilt against new libmemcached
 
