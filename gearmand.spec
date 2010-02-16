@@ -9,7 +9,6 @@ URL:            http://www.gearman.org
 Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
-Patch0:         gearmand-libmemcached.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
@@ -53,7 +52,6 @@ Development libraries for %{name}
 
 %prep
 %setup -q
-%patch0 -p0 -b .libmemcached
 
 %build
 %ifarch ppc64 sparc64
@@ -137,6 +135,7 @@ fi
 * Tue Feb 16 2010 Oliver Falk <oliver@linux-kernel.at> 0.11-1
 - Update to latest upstream version (#565808)
 - Add missing Req. libevent-devel for libgearman-devel (#565808)
+- Remove libmemcache patch - should be fixed in 0.11
 
 * Sun Feb 07 2010 Remi Collet <fedora@famillecollet.com> - 0.9-3
 - patch to detect libmemcached
