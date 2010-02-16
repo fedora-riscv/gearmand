@@ -1,6 +1,6 @@
 Name:           gearmand
-Version:        0.9
-Release:        3%{?dist}
+Version:        0.11
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -9,9 +9,8 @@ URL:            http://www.gearman.org
 Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
 Patch0:         gearmand-libmemcached.patch
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
 
@@ -38,6 +37,7 @@ communicates.
 Summary:        Development headers for libgearman
 Requires:       pkgconfig, libgearman = %{version}-%{release}
 Group:          Development/Libraries
+Requires:       libevent-devel
 
 %description -n libgearman-devel
 Development headers for %{name}
@@ -53,18 +53,17 @@ Development libraries for %{name}
 
 %prep
 %setup -q
-
-%patch0 -p0
-
+%patch0 -p0 -b .libmemcached
 
 %build
 %ifarch ppc64 sparc64
 # no tcmalloc
-%configure --disable-static
+%configure --disable-static --disable-rpath
 %else
-%configure --disable-static --enable-tcmalloc
+%configure --disable-static --disable-rpath --enable-tcmalloc
 %endif
 
+libtoolize -f
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
@@ -73,7 +72,7 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
-rm -v %{buildroot}%{_libdir}/libgearman.la
+rm -v %{buildroot}%{_libdir}/libgearman*.la
 install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 mkdir -p %{buildroot}/var/run/gearmand
@@ -123,17 +122,22 @@ fi
 %doc AUTHORS ChangeLog COPYING README
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/*.h
+%{_includedir}/libgearman-server/*.h
 %{_libdir}/pkgconfig/gearmand.pc
-%{_libdir}/libgearman.so
+%{_libdir}/libgearman*.so
 %{_mandir}/man3/gearman*.3.gz
 
 %files -n libgearman
 %defattr(-,root,root,-)
 %doc COPYING
 %{_libdir}/libgearman.so.*
-
+%{_libdir}/libgearman*.so.*
 
 %changelog
+* Tue Feb 16 2010 Oliver Falk <oliver@linux-kernel.at> 0.11-1
+- Update to latest upstream version (#565808)
+- Add missing Req. libevent-devel for libgearman-devel (#565808)
+
 * Sun Feb 07 2010 Remi Collet <fedora@famillecollet.com> - 0.9-3
 - patch to detect libmemcached
 
