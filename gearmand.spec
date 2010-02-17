@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -11,7 +11,7 @@ Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
+BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached, libtool
 
 %ifnarch ppc64 sparc64
 # no google perftools
@@ -132,6 +132,9 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Wed Feb 17 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.11-2
+- Add BR on libtool
+
 * Tue Feb 16 2010 Oliver Falk <oliver@linux-kernel.at> 0.11-1
 - Update to latest upstream version (#565808)
 - Add missing Req. libevent-devel for libgearman-devel (#565808)
