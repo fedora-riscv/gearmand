@@ -1,6 +1,6 @@
 Name:           gearmand
-Version:        0.11
-Release:        2%{?dist}
+Version:        0.12
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -11,7 +11,7 @@ Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached, libtool
+BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
 
 %ifnarch ppc64 sparc64
 # no google perftools
@@ -61,7 +61,6 @@ Development libraries for %{name}
 %configure --disable-static --disable-rpath --enable-tcmalloc
 %endif
 
-libtoolize -f
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
@@ -120,7 +119,6 @@ fi
 %doc AUTHORS ChangeLog COPYING README
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/*.h
-%{_includedir}/libgearman-server/*.h
 %{_libdir}/pkgconfig/gearmand.pc
 %{_libdir}/libgearman*.so
 %{_mandir}/man3/gearman*.3.gz
@@ -132,6 +130,9 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Fri Feb 19 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.12-1
+- Upstream released new version
+
 * Wed Feb 17 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.11-2
 - Add BR on libtool
 
