@@ -1,5 +1,5 @@
 Name:           gearmand
-Version:        0.12
+Version:        0.13
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -130,6 +130,9 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Wed Apr 07 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.13-1
+- Upstream released new version
+
 * Fri Feb 19 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.12-1
 - Upstream released new version
 
