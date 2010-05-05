@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.13
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -130,6 +130,9 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Wed May 05 2010 Remi Collet <fedora@famillecollet.com> - 0.13-2
+- rebuild against new libmemcached
+
 * Wed Apr 07 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.13-1
 - Upstream released new version
 
