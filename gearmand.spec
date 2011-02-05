@@ -1,5 +1,5 @@
 Name:           gearmand
-Version:        0.9
+Version:        0.14
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -36,6 +36,7 @@ communicates.
 Summary:        Development headers for libgearman
 Requires:       pkgconfig, libgearman = %{version}-%{release}
 Group:          Development/Libraries
+Requires:       libevent-devel
 
 %description -n libgearman-devel
 Development headers for %{name}
@@ -52,13 +53,12 @@ Development libraries for %{name}
 %prep
 %setup -q
 
-
 %build
 %ifarch ppc64 sparc64
 # no tcmalloc
-%configure --disable-static
+%configure --disable-static --disable-rpath
 %else
-%configure --disable-static --enable-tcmalloc
+%configure --disable-static --disable-rpath --enable-tcmalloc
 %endif
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -69,7 +69,7 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
-rm -v %{buildroot}%{_libdir}/libgearman.la
+rm -v %{buildroot}%{_libdir}/libgearman*.la
 install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 mkdir -p %{buildroot}/var/run/gearmand
@@ -120,16 +120,46 @@ fi
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/*.h
 %{_libdir}/pkgconfig/gearmand.pc
-%{_libdir}/libgearman.so
+%{_libdir}/libgearman*.so
 %{_mandir}/man3/gearman*.3.gz
 
 %files -n libgearman
 %defattr(-,root,root,-)
 %doc COPYING
 %{_libdir}/libgearman.so.*
-
+%{_libdir}/libgearman*.so.*
 
 %changelog
+* Fri Feb 04 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-1
+- Latest sources from upstream.  Full changelog available from:
+  https://launchpad.net/gearmand/trunk/0.14
+
+* Wed Oct 06 2010 Remi Collet <fedora@famillecollet.com> - 0.13-3
+- rebuild against new libmemcached
+
+* Wed May 05 2010 Remi Collet <fedora@famillecollet.com> - 0.13-2
+- rebuild against new libmemcached
+
+* Wed Apr 07 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.13-1
+- Upstream released new version
+
+* Fri Feb 19 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.12-1
+- Upstream released new version
+
+* Wed Feb 17 2010 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.11-2
+- Add BR on libtool
+
+* Tue Feb 16 2010 Oliver Falk <oliver@linux-kernel.at> 0.11-1
+- Update to latest upstream version (#565808)
+- Add missing Req. libevent-devel for libgearman-devel (#565808)
+- Remove libmemcache patch - should be fixed in 0.11
+
+* Sun Feb 07 2010 Remi Collet <fedora@famillecollet.com> - 0.9-3
+- patch to detect libmemcached
+
+* Sun Feb 07 2010 Remi Collet <fedora@famillecollet.com> - 0.9-2
+- rebuilt against new libmemcached
+
 * Fri Jul 31 2009 Ruben Kerkhof <ruben@rubenkerkhof.com> 0.9-1
 - Upstream released new version
 
