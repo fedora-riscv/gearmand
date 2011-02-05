@@ -1,6 +1,17 @@
+
+# libmemcached is currently too old in RHEL
+%bcond_with libmemcached
+
+# google-perftools not available in ppc64/sparc64
+%ifnarch ppc64 sparc64
+%bcond_without tcmalloc
+%else
+%bcond_with tcmalloc
+%endif
+
 Name:           gearmand
 Version:        0.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -11,12 +22,22 @@ Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
+BuildRequires:  libevent-devel
 
-%ifnarch ppc64 sparc64
-# no google perftools
+%if 0%{?el5}
+BuildRequires:  e2fsprogs-devel 
+%else
+BuildRequires:  libuuid-devel
+%endif
+
+%if %{with libmemcached}
+BuildRequires: libmemcached-devel
+%endif
+
+%if %{with tcmalloc}
 BuildRequires: google-perftools-devel
 %endif
+
 Requires(pre):   shadow-utils
 Requires(post):  chkconfig
 Requires(preun): chkconfig, initscripts
@@ -54,12 +75,24 @@ Development libraries for %{name}
 %setup -q
 
 %build
-%ifarch ppc64 sparc64
-# no tcmalloc
-%configure --disable-static --disable-rpath
+# optional configure options
+%if %{with tcmalloc}
+    %global configure_tcmalloc --enable-tcmalloc
 %else
-%configure --disable-static --disable-rpath --enable-tcmalloc
+    %global configure_tcmalloc --disable-tcmalloc
 %endif
+
+%if %{with libmemcached}
+    %global configure_libmemcached --enable-libmemcached
+%else
+    %global configure_libmemcached --disable-libmemcached
+%endif
+
+%configure  \
+    --disable-static \
+    %{configure_tcmalloc} \
+    %{configure_libmemcached} \
+    --disable-rpath
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -99,7 +132,6 @@ fi
 
 
 %post -n libgearman -p /sbin/ldconfig
-
 %postun -n libgearman -p /sbin/ldconfig
 
 %files
@@ -130,6 +162,11 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Fri Feb 04 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-2
+- Adding support for EPEL 5/6
+- Added optional support for libmemcached
+- Added optional support for tcmalloc (google-perftools)
+
 * Fri Feb 04 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-1
 - Latest sources from upstream.  Full changelog available from:
   https://launchpad.net/gearmand/trunk/0.14
