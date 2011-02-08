@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -130,6 +130,9 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.14-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Fri Feb 04 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-1
 - Latest sources from upstream.  Full changelog available from:
   https://launchpad.net/gearmand/trunk/0.14
