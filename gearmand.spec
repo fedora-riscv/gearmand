@@ -2,16 +2,28 @@
 # libmemcached is currently too old in RHEL
 %bcond_with libmemcached
 
+# google-perftools is only available for i386/ppc on el5
+# and i686 on el6.  
 # google-perftools not available in ppc64/sparc64
-%ifnarch ppc64 sparc64
-%bcond_without tcmalloc
+%if 0%{?el5}
+%ifarch i386 ppc
+%bcond_without google_perftools 
 %else
-%bcond_with tcmalloc
+%bcond_with google_perftools
+%endif
+%endif
+
+%if 0%{?el6}
+%ifarch i386 i686
+%bcond_without google_perftools
+%else
+%bcond_with google_perftools
+%endif
 %endif
 
 Name:           gearmand
 Version:        0.14
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -34,8 +46,9 @@ BuildRequires:  libuuid-devel
 BuildRequires: libmemcached-devel
 %endif
 
-%if %{with tcmalloc}
-BuildRequires: google-perftools-devel
+%if %{with google_perftools}
+BuildRequires:  google-perftools-devel
+Requires:       google-perftools
 %endif
 
 Requires(pre):   shadow-utils
@@ -77,7 +90,7 @@ Development libraries for %{name}
 
 %build
 # optional configure options
-%if %{with tcmalloc}
+%if %{with google_perftools}
     %global configure_tcmalloc --enable-tcmalloc
 %else
     %global configure_tcmalloc --disable-tcmalloc
@@ -165,6 +178,11 @@ fi
 
 
 %changelog
+* Thu Feb 24 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-3
+- Only build with tcmalloc on selected archs (i386/ppc on el5,
+  and i686 only on el6) based on google-perftools availability
+  in the Koji build repos.
+
 * Fri Feb 04 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-2
 - Adding support for EPEL 5/6
 - Added optional support for libmemcached
