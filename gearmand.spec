@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        0.14
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -13,8 +13,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
 
-%ifnarch ppc64 sparc64
-# no google perftools
+# google perftools available only on these
+%ifarch %{ix86} x86_64 ppc
 BuildRequires: google-perftools-devel
 %endif
 Requires(pre):   shadow-utils
@@ -130,6 +130,9 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Tue Mar 22 2011 Dan Horák <dan[at]danny.cz> - 0.14-4
+- switch to %%ifarch for google-perftools as BR
+
 * Thu Feb 17 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-3
 - Rebuild against latest libevent in rawhide/f15
 
