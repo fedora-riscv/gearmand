@@ -1,6 +1,7 @@
+
 Name:           gearmand
-Version:        0.14
-Release:        3%{?dist}
+Version:        0.20
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -9,9 +10,12 @@ URL:            http://www.gearman.org
 Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
+Source3:        gearmand.service
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
+BuildRequires:  boost-devel >= 1.37.0
+BuildRequires:  systemd-units
 
 %ifnarch ppc64 sparc64
 # no google perftools
@@ -21,6 +25,14 @@ Requires(pre):   shadow-utils
 Requires(post):  chkconfig
 Requires(preun): chkconfig, initscripts
 Requires:        procps
+
+# This is actually needed for the %triggerun script but Requires(triggerun)
+# is not valid.  We can use %post because this particular %triggerun script
+# should fire just after this package is installed.
+Requires(post): systemd-sysv
+Requires(post): systemd-units
+Requires(preun): systemd-units
+Requires(postun): systemd-units
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -72,8 +84,11 @@ make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman*.la
 install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
-mkdir -p %{buildroot}/var/run/gearmand
+mkdir -p    %{buildroot}/var/run/gearmand \
+            %{buildroot}%{_unitdir}
 
+# For systemd
+install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
 
 %clean
 rm -rf %{buildroot}
@@ -87,16 +102,34 @@ getent passwd gearmand >/dev/null || \
 exit 0
 
 %post
-if [ $1 -eq 1 ]; then
-        /sbin/chkconfig --add gearmand
+if [ $1 -eq 1 ] ; then 
+    # Initial installation 
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %preun
-if [ $1 -eq 0 ]; then
-        /sbin/service gearmand stop >/dev/null 2>&1 || :
-        /sbin/chkconfig --del gearmand
+if [ $1 -eq 0 ] ; then
+    # Package removal, not upgrade
+    /bin/systemctl --no-reload disable apache-httpd.service > /dev/null 2>&1 || :
+    /bin/systemctl stop apache-httpd.service > /dev/null 2>&1 || :
 fi
 
+%postun
+/bin/systemctl daemon-reload >/dev/null 2>&1 || :
+if [ $1 -ge 1 ] ; then
+    # Package upgrade, not uninstall
+    /bin/systemctl try-restart apache-httpd.service >/dev/null 2>&1 || :
+fi
+
+%triggerun -- gearmand < 0.20-1
+# Save the current service runlevel info
+# User must manually run systemd-sysv-convert --apply gearmand 
+# to migrate them to systemd targets
+/usr/bin/systemd-sysv-convert --save gearmand >/dev/null 2>&1 ||:
+
+# Run these because the SysV package being removed won't do them
+/sbin/chkconfig --del gearmand >/dev/null 2>&1 || :
+/bin/systemctl try-restart gearmand.service >/dev/null 2>&1 || :
 
 %post -n libgearman -p /sbin/ldconfig
 
@@ -105,14 +138,17 @@ fi
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING README
-%dir %attr(755,gearmand,gearmand) /var/run/gearmand
+%ghost %attr(755,gearmand,gearmand) /var/run/gearmand
 %config(noreplace) %{_sysconfdir}/sysconfig/gearmand
 %{_sbindir}/gearmand
 %{_bindir}/gearman
+%{_bindir}/gearadmin
 %{_initrddir}/gearmand
-%{_mandir}/man1/gearman.1.gz
-%{_mandir}/man8/gearmand.8.gz
-
+%{_unitdir}/%{name}.service
+%{_mandir}/man1/gearman.1*
+%{_mandir}/man8/gearmand.8*
+%{_mandir}/man1/gearadmin.1*
+%{_mandir}/man3/gearman*.3*
 
 %files -n libgearman-devel
 %defattr(-,root,root,-)
@@ -121,15 +157,21 @@ fi
 %{_includedir}/libgearman/*.h
 %{_libdir}/pkgconfig/gearmand.pc
 %{_libdir}/libgearman*.so
-%{_mandir}/man3/gearman*.3.gz
+%{_mandir}/man3/libgearman*.3*
 
 %files -n libgearman
 %defattr(-,root,root,-)
 %doc COPYING
 %{_libdir}/libgearman.so.*
-%{_libdir}/libgearman*.so.*
 
 %changelog
+* Fri Jun 03 2011 BJ Dierkes@rackspace.com> - 0.20-1
+- Latest sources from upstream.  
+- Add %%ghost to /var/run/gearmand. Resolves BZ#656592
+- BuildRequires: boost-devel >= 1.37.0
+- Adding gearadmin files
+- Converted to Systemd.  Resolves BZ#661643
+
 * Thu Feb 17 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-3
 - Rebuild against latest libevent in rawhide/f15
 
