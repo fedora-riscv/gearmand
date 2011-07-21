@@ -1,13 +1,13 @@
 
 Name:           gearmand
-Version:        0.20
+Version:        0.23
 Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
-Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz
+Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz 
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
@@ -165,7 +165,11 @@ fi
 %{_libdir}/libgearman.so.*
 
 %changelog
-* Fri Jun 03 2011 BJ Dierkes@rackspace.com> - 0.20-1
+* Thu Jul 21 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.23-1
+- Latest source from upstream.  Release information available at:
+  https://launchpad.net/gearmand/+milestone/0.23
+
+* Fri Jun 03 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.20-1
 - Latest sources from upstream.  
 - Add %%ghost to /var/run/gearmand. Resolves BZ#656592
 - BuildRequires: boost-devel >= 1.37.0
