@@ -1,6 +1,6 @@
 
 Name:           gearmand
-Version:        0.26
+Version:        0.25
 Release:        1%{?dist}
 Summary:        A distributed job system
 
