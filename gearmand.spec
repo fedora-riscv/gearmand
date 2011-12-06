@@ -1,6 +1,6 @@
 
 Name:           gearmand
-Version:        0.25
+Version:        0.26
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -57,9 +57,24 @@ Development headers for %{name}
 Summary:        Development libraries for gearman
 Group:          Development/Libraries
 
-
 %description -n libgearman
-Development libraries for %{name}
+Development libraries for %{name} 1.0
+
+%package -n libgearman-1.0-devel
+Summary:        Development headers for libgearman 1.0
+Requires:       pkgconfig, libgearman = %{version}-%{release}
+Group:          Development/Libraries
+Requires:       libevent-devel
+
+%description -n libgearman-1.0-devel
+Development headers for %{name}
+
+%package -n libgearman-1.0
+Summary:        Development libraries for gearman 1.0
+Group:          Development/Libraries
+
+%description -n libgearman-1.0
+Development libraries for %{name} 1.0
 
 
 %prep
@@ -160,15 +175,23 @@ fi
 %{_mandir}/man3/libgearman*.3*
 
 %files -n libgearman
+defattr(-,root,root,-)
+%dodssssc COPYING
+#%%{_libdir}/libgearman.so.*
+
+%files -n libgearman-1.0-devel
 %defattr(-,root,root,-)
-%doc COPYING
-%{_libdir}/libgearman.so.*
+%{_libdir}/libgearman*.so
+
+%files -n libgearman-1.0
+%defattr(-,root,root,-)
 
 %changelog
 * Tue Nov 22 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.25-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.25
 - Also rebuild against libboost_program_options-mt.so.1.47.0 
+- Added libgearman-1.0, libgearman-1.0-devel per upstream 
 
 * Sat Sep 17 2011  Remi Collet <remi@fedoraproject.org> - 0.23-2
 - rebuild against libmemcached.so.8
