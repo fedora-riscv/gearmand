@@ -44,6 +44,13 @@ In other words, it is the nervous system for how distributed processing
 communicates.
 
 
+%package -n libgearman
+Summary:        Development libraries for gearman
+Group:          Development/Libraries
+
+%description -n libgearman
+Development libraries for %{name}.
+
 %package -n libgearman-devel
 Summary:        Development headers for libgearman
 Requires:       pkgconfig, libgearman = %{version}-%{release}
@@ -51,14 +58,14 @@ Group:          Development/Libraries
 Requires:       libevent-devel
 
 %description -n libgearman-devel
-Development headers for %{name}
+Development headers for %{name}.
 
-%package -n libgearman
-Summary:        Development libraries for gearman
+%package -n libgearman-1.0
+Summary:        Development libraries for gearman 1.0
 Group:          Development/Libraries
 
-%description -n libgearman
-Development libraries for %{name} 1.0
+%description -n libgearman-1.0
+Development libraries for %{name} 1.0.
 
 %package -n libgearman-1.0-devel
 Summary:        Development headers for libgearman 1.0
@@ -67,14 +74,7 @@ Group:          Development/Libraries
 Requires:       libevent-devel
 
 %description -n libgearman-1.0-devel
-Development headers for %{name}
-
-%package -n libgearman-1.0
-Summary:        Development libraries for gearman 1.0
-Group:          Development/Libraries
-
-%description -n libgearman-1.0
-Development libraries for %{name} 1.0
+Development headers for %{name} 1.0.
 
 
 %prep
@@ -142,7 +142,7 @@ fi
 # to migrate them to systemd targets
 /usr/bin/systemd-sysv-convert --save gearmand >/dev/null 2>&1 ||:
 
-# Run these because the SysV package being removed won't do them
+#Run these because the SysV package being removed won't do them
 /sbin/chkconfig --del gearmand >/dev/null 2>&1 || :
 /bin/systemctl try-restart gearmand.service >/dev/null 2>&1 || :
 
@@ -165,26 +165,27 @@ fi
 %{_mandir}/man1/gearadmin.1*
 %{_mandir}/man3/gearman*.3*
 
+%files -n libgearman
+%defattr(-,root,root,-)
+%doc COPYING
+%{_libdir}/libgearman.so.6
+%{_libdir}/libgearman.so.6.0.0
+
 %files -n libgearman-devel
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING README
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/*.h
 %{_libdir}/pkgconfig/gearmand.pc
-%{_libdir}/libgearman*.so
 %{_mandir}/man3/libgearman*.3*
-
-%files -n libgearman
-%defattr(-,root,root,-)
-%doc COPYING
-#%%{_libdir}/libgearman.so.*
-
-%files -n libgearman-1.0-devel
-%defattr(-,root,root,-)
-%{_libdir}/libgearman*.so
 
 %files -n libgearman-1.0
 %defattr(-,root,root,-)
+%{_libdir}/libgearman.so
+
+%files -n libgearman-1.0-devel
+%defattr(-,root,root,-)
+%{_includedir}/libgearman-1.0/
 
 %changelog
 * Tue Nov 22 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.25-1
