@@ -176,7 +176,7 @@ fi
 
 %files -n libgearman
 defattr(-,root,root,-)
-%dodssssc COPYING
+%doc COPYING
 #%%{_libdir}/libgearman.so.*
 
 %files -n libgearman-1.0-devel
