@@ -175,7 +175,7 @@ fi
 %{_mandir}/man3/libgearman*.3*
 
 %files -n libgearman
-defattr(-,root,root,-)
+%defattr(-,root,root,-)
 %doc COPYING
 #%%{_libdir}/libgearman.so.*
 
