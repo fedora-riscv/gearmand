@@ -1,6 +1,6 @@
 
 Name:           gearmand
-Version:        0.25
+Version:        0.27
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -188,6 +188,10 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Tue Jan 10 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-1
+- Latest sources from upstream.  Release notes here:
+  https://launchpad.net/gearmand/trunk/0.27
+ 
 * Tue Nov 22 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.25-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.25
