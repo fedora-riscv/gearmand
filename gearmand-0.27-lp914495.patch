@@ -1,0 +1,12 @@
+https://bugs.launchpad.net/gearmand/+bug/914495
+
+--- gearmand-0.27/util/instance.cc.orig	2011-10-28 22:33:38.000000000 -0500
++++ gearmand-0.27/util/instance.cc	2012-01-12 20:02:51.303519844 -0600
+@@ -48,6 +48,7 @@
+ #include <sys/socket.h>
+ #include <sys/types.h>
+ #include <netinet/in.h>
++#include <unistd.h>
+ 
+ 
+ namespace datadifferential {
