@@ -20,3 +20,13 @@ https://bugs.launchpad.net/gearmand/+bug/914495
  
  extern "C" {
  
+--- gearmand-0.27/util/logfile.cc.orig	2011-09-26 23:59:09.000000000 -0500
++++ gearmand-0.27/util/logfile.cc	2012-01-12 20:57:25.526030905 -0600
+@@ -49,6 +49,7 @@
+ #include <sstream>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <unistd.h>
+ 
+ namespace datadifferential {
+ namespace util {
