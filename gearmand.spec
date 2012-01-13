@@ -34,6 +34,9 @@ Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
 
+Patch0: gearmand-0.27-unistd.patch
+
+
 %description
 Gearman provides a generic framework to farm out work to other machines
 or dispatch function calls to machines that are better suited to do the work.
@@ -79,6 +82,7 @@ Development headers for %{name} 1.0.
 
 %prep
 %setup -q
+%patch -p1 -b gearmand-0.27-unistd.patch
 
 %build
 %ifarch ppc64 sparc64
@@ -191,6 +195,7 @@ fi
 * Tue Jan 10 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.27
+- Added Patch0: gearmand-0.27-unistd.patch.  Resolves LP#914495
  
 * Tue Nov 22 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.25-1
 - Latest sources from upstream.  Release notes here:
