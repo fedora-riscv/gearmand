@@ -81,7 +81,7 @@ Development headers for %{name} 1.0.
 
 %prep
 %setup -q
-%patch1 -p1 -b .lp914495
+%patch0 -p1 -b .lp914495
 
 %build
 %ifarch ppc64 sparc64
