@@ -36,7 +36,7 @@ Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
 
-Patch0: gearmand-0.27-lp914495.patch 
+#Patch0: gearmand-0.27-lp914495.patch 
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -83,7 +83,6 @@ Development headers for %{name} 1.0.
 
 %prep
 %setup -q
-%patch0 -p1 -b .lp914495
 
 %build
 %ifarch ppc64 sparc64
@@ -196,6 +195,7 @@ fi
 * Fri Jan 27 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.28
+- Removing Patch0: gearmand-0.27-lp914495.patch (applied upstream)
 
 * Thu Jan 12 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-2
 - Adding Patch0: gearmand-0.27-lp914495.patch Resolves LP#914495
