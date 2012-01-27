@@ -1,6 +1,6 @@
 
 Name:           gearmand
-Version:        0.27
+Version:        0.28
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -8,7 +8,7 @@ Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
 Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz 
-Source1:        gearmand.init
+#Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -22,9 +22,11 @@ BuildRequires:  systemd-units
 BuildRequires: google-perftools-devel
 %endif
 Requires(pre):   shadow-utils
+Requires:        procps
+
+# FIX ME: Should be removed after 0.27-1
 Requires(post):  chkconfig
 Requires(preun): chkconfig, initscripts
-Requires:        procps
 
 # This is actually needed for the %triggerun script but Requires(triggerun)
 # is not valid.  We can use %post because this particular %triggerun script
@@ -100,7 +102,7 @@ make %{?_smp_mflags}
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman*.la
-install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
+#install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 mkdir -p    %{buildroot}/var/run/gearmand \
             %{buildroot}%{_unitdir}
@@ -161,7 +163,7 @@ fi
 %{_sbindir}/gearmand
 %{_bindir}/gearman
 %{_bindir}/gearadmin
-%{_initrddir}/gearmand
+#%%{_initrddir}/gearmand
 %{_unitdir}/%{name}.service
 %{_mandir}/man1/gearman.1*
 %{_mandir}/man8/gearmand.8*
@@ -191,6 +193,10 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Fri Jan 27 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-1
+- Latest sources from upstream.  Release notes here:
+  https://launchpad.net/gearmand/trunk/0.28
+
 * Thu Jan 12 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-2
 - Adding Patch0: gearmand-0.27-lp914495.patch Resolves LP#914495
 
