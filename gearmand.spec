@@ -94,7 +94,8 @@ Development headers for %{name} 1.0.
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-make %{?_smp_mflags}
+#make %{?_smp_mflags}
+make
 
 
 %install
@@ -196,6 +197,7 @@ fi
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.28
 - Removing Patch0: gearmand-0.27-lp914495.patch (applied upstream)
+- Removing smp flags (temporarily ?) due to build issues upstream
 
 * Thu Jan 12 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-2
 - Adding Patch0: gearmand-0.27-lp914495.patch Resolves LP#914495
