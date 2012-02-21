@@ -94,8 +94,7 @@ Development headers for %{name} 1.0.
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-#make %{?_smp_mflags}
-make
+make %{?_smp_mflags}
 
 
 %install
@@ -130,15 +129,15 @@ fi
 %preun
 if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
-    /bin/systemctl --no-reload disable apache-httpd.service > /dev/null 2>&1 || :
-    /bin/systemctl stop apache-httpd.service > /dev/null 2>&1 || :
+    /bin/systemctl --no-reload disable gearmand.service > /dev/null 2>&1 || :
+    /bin/systemctl stop gearmand.service > /dev/null 2>&1 || :
 fi
 
 %postun
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 if [ $1 -ge 1 ] ; then
     # Package upgrade, not uninstall
-    /bin/systemctl try-restart apache-httpd.service >/dev/null 2>&1 || :
+    /bin/systemctl try-restart gearmand.service >/dev/null 2>&1 || :
 fi
 
 %triggerun -- gearmand < 0.20-1
@@ -197,7 +196,6 @@ fi
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.28
 - Removing Patch0: gearmand-0.27-lp914495.patch (applied upstream)
-- Removing smp flags (temporarily ?) due to build issues upstream
 
 * Thu Jan 12 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-2
 - Adding Patch0: gearmand-0.27-lp914495.patch Resolves LP#914495
