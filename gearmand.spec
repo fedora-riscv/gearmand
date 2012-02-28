@@ -1,7 +1,7 @@
 
 Name:           gearmand
 Version:        0.27
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -191,6 +191,9 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.27-2
+- Rebuilt for c++ ABI breakage
+
 * Thu Jan 12 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-2
 - Adding Patch0: gearmand-0.27-lp914495.patch Resolves LP#914495
 
