@@ -93,7 +93,8 @@ Development headers for %{name} 1.0.
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-make %{?_smp_mflags}
+# make %{?_smp_mflags}
+make
 
 
 %install
@@ -193,6 +194,7 @@ fi
 %changelog
 * Wed Mar  7 2012 Tom Callaway <spot@fedoraproject.org> - 0.27-2.1
 - rebuild against gperftools
+- drop smp_mflags to get it to build
 
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.27-2
 - Rebuilt for c++ ABI breakage
