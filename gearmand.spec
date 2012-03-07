@@ -1,7 +1,7 @@
 
 Name:           gearmand
 Version:        0.28
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -92,7 +92,7 @@ Development headers for %{name} 1.0.
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-make 
+make %{_smp_mflags}
 
 
 %install
@@ -190,6 +190,9 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Wed Mar 07 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-3
+- Adding back _smp_mflags
+
 * Wed Mar 07 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-2
 - Added Patch1: gearmand-0.28-lp932994.patch.  Resolves: LP#932994
 
