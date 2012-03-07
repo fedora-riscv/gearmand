@@ -1,7 +1,7 @@
 
 Name:           gearmand
 Version:        0.27
-Release:        2%{?dist}
+Release:        2%{?dist}.1
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -19,7 +19,7 @@ BuildRequires:  systemd-units
 
 # google perftools available only on these
 %ifarch %{ix86} x86_64 ppc
-BuildRequires: google-perftools-devel
+BuildRequires: gperftools-devel
 %endif
 Requires(pre):   shadow-utils
 Requires(post):  chkconfig
@@ -191,6 +191,9 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Wed Mar  7 2012 Tom Callaway <spot@fedoraproject.org> - 0.27-2.1
+- rebuild against gperftools
+
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.27-2
 - Rebuilt for c++ ABI breakage
 
