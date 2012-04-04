@@ -23,7 +23,7 @@
 
 Name:           gearmand
 Version:        0.14
-Release:        3%{?dist}
+Release:        3%{?dist}.1
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -47,8 +47,8 @@ BuildRequires: libmemcached-devel
 %endif
 
 %if %{with google_perftools}
-BuildRequires:  google-perftools-devel
-Requires:       google-perftools
+BuildRequires:  gperftools-devel
+Requires:       gperftools
 %endif
 
 Requires(pre):   shadow-utils
@@ -175,6 +175,9 @@ fi
 %{_libdir}/libgearman*.so.*
 
 %changelog
+* Wed Apr  4 2012 Tom Callaway <spot@fedoraproject.org> - 0.14-3.1
+- rebuild against gperftools
+
 * Thu Feb 24 2011 BJ Dierkes <wdierkes@rackspace.com> - 0.14-3
 - Only build with tcmalloc on selected archs (i386/ppc on el5,
   and i686 only on el6) based on google-perftools availability
