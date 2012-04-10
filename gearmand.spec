@@ -1,7 +1,7 @@
 
 Name:           gearmand
-Version:        0.28
-Release:        3%{?dist}
+Version:        0.31
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -190,6 +190,11 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Tue Apr 10 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.31-1
+- Latest sources from upstream.  Release notes here:
+  https://launchpad.net/gearmand/trunk/0.31
+  https://launchpad.net/gearmand/trunk/0.29
+
 * Wed Mar 07 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-3
 - Adding back _smp_mflags
 
