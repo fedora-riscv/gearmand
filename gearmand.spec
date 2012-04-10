@@ -1,14 +1,14 @@
 
 Name:           gearmand
-Version:        0.27
-Release:        2%{?dist}.1
+Version:        0.31
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
 Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz 
-Source1:        gearmand.init
+#Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -22,8 +22,6 @@ BuildRequires:  systemd-units
 BuildRequires: gperftools-devel
 %endif
 Requires(pre):   shadow-utils
-Requires(post):  chkconfig
-Requires(preun): chkconfig, initscripts
 Requires:        procps
 
 # This is actually needed for the %triggerun script but Requires(triggerun)
@@ -34,7 +32,9 @@ Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
 
-Patch0: gearmand-0.27-lp914495.patch 
+#Patch0: gearmand-0.27-lp914495.patch 
+#Patch1: gearmand-0.28-lp932994.patch
+Patch2: gearmand-0.31-lp978235.patch
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -81,7 +81,8 @@ Development headers for %{name} 1.0.
 
 %prep
 %setup -q
-%patch0 -p1 -b .lp914495
+#%%patch1 -p1 -b .lp932994
+%patch2 -p1 -b .lp978235
 
 %build
 %ifarch ppc64 sparc64
@@ -93,15 +94,14 @@ Development headers for %{name} 1.0.
 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-# make %{?_smp_mflags}
-make
+make %{_smp_mflags}
 
 
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman*.la
-install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
+#install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 mkdir -p    %{buildroot}/var/run/gearmand \
             %{buildroot}%{_unitdir}
@@ -129,15 +129,15 @@ fi
 %preun
 if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
-    /bin/systemctl --no-reload disable apache-httpd.service > /dev/null 2>&1 || :
-    /bin/systemctl stop apache-httpd.service > /dev/null 2>&1 || :
+    /bin/systemctl --no-reload disable gearmand.service > /dev/null 2>&1 || :
+    /bin/systemctl stop gearmand.service > /dev/null 2>&1 || :
 fi
 
 %postun
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 if [ $1 -ge 1 ] ; then
     # Package upgrade, not uninstall
-    /bin/systemctl try-restart apache-httpd.service >/dev/null 2>&1 || :
+    /bin/systemctl try-restart gearmand.service >/dev/null 2>&1 || :
 fi
 
 %triggerun -- gearmand < 0.20-1
@@ -162,7 +162,7 @@ fi
 %{_sbindir}/gearmand
 %{_bindir}/gearman
 %{_bindir}/gearadmin
-%{_initrddir}/gearmand
+#%%{_initrddir}/gearmand
 %{_unitdir}/%{name}.service
 %{_mandir}/man1/gearman.1*
 %{_mandir}/man8/gearmand.8*
@@ -192,12 +192,24 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
-* Wed Mar  7 2012 Tom Callaway <spot@fedoraproject.org> - 0.27-2.1
-- rebuild against gperftools
-- drop smp_mflags to get it to build
+* Tue Apr 10 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.31-1
+- Latest sources from upstream.  Release notes here:
+  https://launchpad.net/gearmand/trunk/0.31
+  https://launchpad.net/gearmand/trunk/0.29
+- Removed Patch1: gearmand-0.28-lp932994.patch (applied upstream)
+- Added Patch2: gearmand-0.31-lp978235.patch.  Resolves LP#978235.
 
-* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.27-2
-- Rebuilt for c++ ABI breakage
+* Wed Mar 07 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-3
+- Adding back _smp_mflags
+
+* Wed Mar 07 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-2
+- Added Patch1: gearmand-0.28-lp932994.patch.  Resolves: LP#932994
+
+* Fri Jan 27 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-1
+- Latest sources from upstream.  Release notes here:
+  https://launchpad.net/gearmand/trunk/0.28
+- Removing Patch0: gearmand-0.27-lp914495.patch (applied upstream)
+- Removing _smp_mflags per https://bugs.launchpad.net/bugs/901007
 
 * Thu Jan 12 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.27-2
 - Adding Patch0: gearmand-0.27-lp914495.patch Resolves LP#914495
