@@ -33,7 +33,7 @@ Requires(preun): systemd-units
 Requires(postun): systemd-units
 
 #Patch0: gearmand-0.27-lp914495.patch 
-Patch1: gearmand-0.28-lp932994.patch
+#Patch1: gearmand-0.28-lp932994.patch
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -80,7 +80,7 @@ Development headers for %{name} 1.0.
 
 %prep
 %setup -q
-%patch1 -p1 -b .lp932994
+#%%patch1 -p1 -b .lp932994
 
 %build
 %ifarch ppc64 sparc64
@@ -194,6 +194,7 @@ fi
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.31
   https://launchpad.net/gearmand/trunk/0.29
+- Removed Patch1: gearmand-0.28-lp932994.patch (applied upstream)
 
 * Wed Mar 07 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.28-3
 - Adding back _smp_mflags
