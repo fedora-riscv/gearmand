@@ -1,6 +1,6 @@
 
 Name:           gearmand
-Version:        0.31
+Version:        0.32
 Release:        1%{?dist}
 Summary:        A distributed job system
 
@@ -34,7 +34,7 @@ Requires(postun): systemd-units
 
 #Patch0: gearmand-0.27-lp914495.patch 
 #Patch1: gearmand-0.28-lp932994.patch
-Patch2: gearmand-0.31-lp978235.patch
+#Patch2: gearmand-0.31-lp978235.patch
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -82,7 +82,7 @@ Development headers for %{name} 1.0.
 %prep
 %setup -q
 #%%patch1 -p1 -b .lp932994
-%patch2 -p1 -b .lp978235
+#%%patch2 -p1 -b .lp978235
 
 %build
 %ifarch ppc64 sparc64
@@ -192,6 +192,11 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Tue Apr 18 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.32-1
+- Latest sources from upstream.  Release notes here:
+  https://launchpad.net/gearmand/trunk/0.32
+- Removed Patch2: gearmand-0.31-lp978235.patch (applied upstream)
+
 * Tue Apr 10 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.31-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.31
