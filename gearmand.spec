@@ -35,6 +35,7 @@ Requires(postun): systemd-units
 #Patch0: gearmand-0.27-lp914495.patch 
 #Patch1: gearmand-0.28-lp932994.patch
 #Patch2: gearmand-0.31-lp978235.patch
+Patch3: gearmand-0.33-lp1020778.patch
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -83,6 +84,7 @@ Development headers for %{name} 1.0.
 %setup -q
 #%%patch1 -p1 -b .lp932994
 #%%patch2 -p1 -b .lp978235
+%patch3 -p1 -b .lp1020778
 
 %build
 %ifarch ppc64 sparc64
@@ -195,6 +197,7 @@ fi
 * Tue Jul 03 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.33-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.33
+- Adding Patch3: gearmand-0.33-lp1020778.patch
 
 * Mon Apr 23 2012  Remi Collet <remi@fedoraproject.org> - 0.32-2
 - rebuild against libmemcached.so.10
