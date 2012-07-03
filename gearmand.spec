@@ -1,7 +1,7 @@
 
 Name:           gearmand
-Version:        0.32
-Release:        2%{?dist}
+Version:        0.33
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -192,6 +192,10 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Tue Jul 03 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.33-1
+- Latest sources from upstream.  Release notes here:
+  https://launchpad.net/gearmand/trunk/0.33
+
 * Mon Apr 23 2012  Remi Collet <remi@fedoraproject.org> - 0.32-2
 - rebuild against libmemcached.so.10
 
