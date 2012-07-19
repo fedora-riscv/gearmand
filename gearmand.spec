@@ -1,7 +1,7 @@
 
 Name:           gearmand
 Version:        0.33
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -194,6 +194,9 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.33-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Tue Jul 03 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.33-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.33
