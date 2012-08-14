@@ -1,7 +1,7 @@
 
 Name:           gearmand
-Version:        0.33
-Release:        2%{?dist}
+Version:        0.35
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -16,6 +16,12 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
 BuildRequires:  boost-devel >= 1.37.0
 BuildRequires:  systemd-units
+
+# Additional support
+BuildRequires: mysql-devel, mysql-libs
+BuildRequires:  zlib-devel
+Requires: mysql
+Requires: zlib
 
 # google perftools available only on these
 %ifarch %{ix86} x86_64 ppc
@@ -35,7 +41,7 @@ Requires(postun): systemd-units
 #Patch0: gearmand-0.27-lp914495.patch 
 #Patch1: gearmand-0.28-lp932994.patch
 #Patch2: gearmand-0.31-lp978235.patch
-Patch3: gearmand-0.33-lp1020778.patch
+#Patch3: gearmand-0.33-lp1020778.patch
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -84,7 +90,7 @@ Development headers for %{name} 1.0.
 %setup -q
 #%%patch1 -p1 -b .lp932994
 #%%patch2 -p1 -b .lp978235
-%patch3 -p1 -b .lp1020778
+#%%patch3 -p1 -b .lp1020778
 
 %build
 %ifarch ppc64 sparc64
@@ -194,6 +200,13 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Mon Aug 13 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.35-1
+- Latest sources from upstream. Release notes here:
+  https://launchpad.net/gearmand/trunk/0.35
+- Removed Patch3: gearmand-0.33-lp1020778.patch (applied upstream)
+- Added zlib support
+- Added libmysql support 
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.33-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
