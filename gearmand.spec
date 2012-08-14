@@ -14,7 +14,7 @@ Source3:        gearmand.service
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
-BuildRequires:  boost-devel >= 1.37.0
+BuildRequires:  boost-devel >= 1.37.0, boost-thread
 BuildRequires:  systemd-units
 
 # google perftools available only on these
@@ -196,6 +196,7 @@ fi
 %changelog
 * Wed Aug 15 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.33-3
 - Rebuilt for latest boost.
+- BuildRequires: boost-thread
 
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.33-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
