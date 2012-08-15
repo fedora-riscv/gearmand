@@ -87,6 +87,9 @@ Development headers for %{name} 1.0.
 %patch3 -p1 -b .lp1020778
 
 %build
+# HACK to work around boost issues.
+export LDFLAGS="$LDFLAGS -lboost_system"
+
 %ifarch ppc64 sparc64
 # no tcmalloc
 %configure --disable-static --disable-rpath
@@ -197,6 +200,8 @@ fi
 * Wed Aug 15 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.33-3
 - Rebuilt for latest boost.
 - BuildRequires: boost-thread
+- Added -lboost_system to LDFLAGS to work around boost issue
+  related to boost-thread.
 
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.33-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
