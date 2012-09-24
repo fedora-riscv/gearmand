@@ -1,13 +1,13 @@
 
 Name:           gearmand
-Version:        0.35
+Version:        0.39
 Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
-Source0:        http://launchpad.net/gearmand/trunk/%{version}/+download/gearmand-%{version}.tar.gz 
+Source0:        https://launchpad.net/gearmand/1.0/%{version}/+download/gearmand-%{version}.tar.gz
 #Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
@@ -203,6 +203,10 @@ fi
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Mon Sep 24 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.39-1
+- Latest sources from upstream. Release notes here:
+  https://launchpad.net/gearmand/trunk/0.39
+
 * Wed Aug 15 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.35-1
 - Latest sources from upstream. Release notes here:
   https://launchpad.net/gearmand/trunk/0.35
