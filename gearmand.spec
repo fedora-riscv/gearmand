@@ -18,10 +18,9 @@ BuildRequires:  boost-devel >= 1.37.0, boost-thread
 BuildRequires:  systemd-units
 
 # Additional support
-BuildRequires: mysql-devel, mysql-libs
-BuildRequires:  zlib-devel
-Requires: mysql
-Requires: zlib
+BuildRequires: mysql-devel, mysql-libs, sqlite-devel, postgresql-devel, postgresql-libs
+BuildRequires: zlib-devel
+#Requires: mysql-libs, postgresql-libs, zlib
 
 # google perftools available only on these
 %ifarch %{ix86} x86_64 ppc
@@ -183,8 +182,8 @@ fi
 %files -n libgearman
 %defattr(-,root,root,-)
 %doc COPYING
-%{_libdir}/libgearman.so.6
-%{_libdir}/libgearman.so.6.0.0
+%{_libdir}/libgearman.so.7
+%{_libdir}/libgearman.so.7.0.0
 
 %files -n libgearman-devel
 %defattr(-,root,root,-)
@@ -206,13 +205,15 @@ fi
 * Mon Sep 24 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.39-1
 - Latest sources from upstream. Release notes here:
   https://launchpad.net/gearmand/trunk/0.39
+- Added Postgres support
+- Added Sqlite support
 
 * Wed Aug 15 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.35-1
 - Latest sources from upstream. Release notes here:
   https://launchpad.net/gearmand/trunk/0.35
 - Removed Patch3: gearmand-0.33-lp1020778.patch (applied upstream)
 - Added zlib support
-- Added libmysql support 
+- Added MySQL support 
 
 * Wed Aug 15 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.33-3
 - Rebuilt for latest boost.
