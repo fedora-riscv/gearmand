@@ -159,18 +159,13 @@ fi
 %{_sbindir}/gearmand
 %{_bindir}/gearman
 %{_bindir}/gearadmin
-#%%{_initrddir}/gearmand
 %{_unitdir}/%{name}.service
-%{_mandir}/man1/gearman.1*
-%{_mandir}/man8/gearmand.8*
-%{_mandir}/man1/gearadmin.1*
-%{_mandir}/man3/gearman*.3*
 
 %files -n libgearman
 %defattr(-,root,root,-)
 %doc COPYING
-%{_libdir}/libgearman.so.7
-%{_libdir}/libgearman.so.7.0.0
+%{_libdir}/libgearman.so.8
+%{_libdir}/libgearman.so.8.0.0
 
 %files -n libgearman-devel
 %defattr(-,root,root,-)
@@ -178,7 +173,6 @@ fi
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/*.h
 %{_libdir}/pkgconfig/gearmand.pc
-%{_mandir}/man3/libgearman*.3*
 %{_libdir}/libgearman.so
 %{_includedir}/libgearman-1.0/
 
