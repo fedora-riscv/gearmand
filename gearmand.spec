@@ -118,34 +118,13 @@ getent passwd gearmand >/dev/null || \
 exit 0
 
 %post
-if [ $1 -eq 1 ] ; then 
-    # Initial installation 
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
+%systemd_post gearmand.service
 
 %preun
-if [ $1 -eq 0 ] ; then
-    # Package removal, not upgrade
-    /bin/systemctl --no-reload disable gearmand.service > /dev/null 2>&1 || :
-    /bin/systemctl stop gearmand.service > /dev/null 2>&1 || :
-fi
+%systemd_preun gearmand.service
 
 %postun
-/bin/systemctl daemon-reload >/dev/null 2>&1 || :
-if [ $1 -ge 1 ] ; then
-    # Package upgrade, not uninstall
-    /bin/systemctl try-restart gearmand.service >/dev/null 2>&1 || :
-fi
-
-%triggerun -- gearmand < 0.20-1
-# Save the current service runlevel info
-# User must manually run systemd-sysv-convert --apply gearmand 
-# to migrate them to systemd targets
-/usr/bin/systemd-sysv-convert --save gearmand >/dev/null 2>&1 ||:
-
-#Run these because the SysV package being removed won't do them
-/sbin/chkconfig --del gearmand >/dev/null 2>&1 || :
-/bin/systemctl try-restart gearmand.service >/dev/null 2>&1 || :
+%systemd_postun_with_restart gearmand.service
 
 %post -n libgearman -p /sbin/ldconfig
 
@@ -183,6 +162,7 @@ fi
   https://launchpad.net/gearmand/1.2/1.1.2
 - Repackaged libgearman-1.0, and libgearman-1.0-devel under the
   devel sub-package.
+- Updated scriptlets per BZ#850127
  
 * Mon Sep 24 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.39-1
 - Latest sources from upstream. Release notes here:
