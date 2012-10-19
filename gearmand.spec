@@ -1,13 +1,13 @@
 
 Name:           gearmand
-Version:        0.39
+Version:        1.1.2 
 Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
-Source0:        https://launchpad.net/gearmand/1.0/%{version}/+download/gearmand-%{version}.tar.gz
+Source0:        https://launchpad.net/gearmand/1.2/%{version}/+download/gearmand-%{version}.tar.gz
 #Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
@@ -55,6 +55,8 @@ communicates.
 %package -n libgearman
 Summary:        Development libraries for gearman
 Group:          Development/Libraries
+Provides:       libgearman-1.0 = %{version}-%{release}
+Obsoletes:      libgearman-1.0 < %{version}-%{release}
 
 %description -n libgearman
 Development libraries for %{name}.
@@ -64,26 +66,11 @@ Summary:        Development headers for libgearman
 Requires:       pkgconfig, libgearman = %{version}-%{release}
 Group:          Development/Libraries
 Requires:       libevent-devel
+Provides:       libgearman-1.0-devel = %{version}-%{release}
+Obsoletes:      libgearman-1.0-devel < %{version}-%{release}
 
 %description -n libgearman-devel
 Development headers for %{name}.
-
-%package -n libgearman-1.0
-Summary:        Development libraries for gearman 1.0
-Group:          Development/Libraries
-
-%description -n libgearman-1.0
-Development libraries for %{name} 1.0.
-
-%package -n libgearman-1.0-devel
-Summary:        Development headers for libgearman 1.0
-Requires:       pkgconfig, libgearman = %{version}-%{release}
-Group:          Development/Libraries
-Requires:       libevent-devel
-
-%description -n libgearman-1.0-devel
-Development headers for %{name} 1.0.
-
 
 %prep
 %setup -q
@@ -192,16 +179,17 @@ fi
 %{_includedir}/libgearman/*.h
 %{_libdir}/pkgconfig/gearmand.pc
 %{_mandir}/man3/libgearman*.3*
-
-%files -n libgearman-1.0
-%defattr(-,root,root,-)
 %{_libdir}/libgearman.so
-
-%files -n libgearman-1.0-devel
-%defattr(-,root,root,-)
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Thu Oct 18 2012 BJ Dierkes <wdierkes@rackspace.com> - 1.1.2-1
+- Bumping to 1.2 branch (1.1.2 current development version).
+  Release notes are available here:
+  https://launchpad.net/gearmand/1.2/1.1.2
+- Repackaged libgearman-1.0, and libgearman-1.0-devel under the
+  devel sub-package.
+ 
 * Mon Sep 24 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.39-1
 - Latest sources from upstream. Release notes here:
   https://launchpad.net/gearmand/trunk/0.39
