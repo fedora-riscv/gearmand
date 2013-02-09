@@ -1,7 +1,7 @@
 
 Name:           gearmand
 Version:        1.1.2 
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -156,6 +156,9 @@ exit 0
 %{_includedir}/libgearman-1.0/
 
 %changelog
+* Sat Feb 09 2013 Denis Arnaud <denis.arnaud_fedora@m4x.org> - 1.1.2-2
+- Rebuild for Boost-1.53.0
+
 * Thu Oct 18 2012 BJ Dierkes <wdierkes@rackspace.com> - 1.1.2-1
 - Bumping to 1.2 branch (1.1.2 current development version).
   Release notes are available here:
