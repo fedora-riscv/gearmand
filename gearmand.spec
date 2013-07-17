@@ -1,46 +1,87 @@
+# Use systemd unit files on Fedora 18 and above.
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
+  %global _with_systemd 1
+%endif
+
+# Skip deps that are too old on EL5.
+%if 0%{?el5}
+  %global _with_gperftools 0
+  %global _with_sqlite 0
+  %global _with_tokyocabinet 0
+%else
+  %global _with_gperftools 1
+  %global _with_sqlite 1
+  %global _with_tokyocabinet 1
+%endif
 
 Name:           gearmand
-Version:        1.1.2 
-Release:        3%{?dist}
+Version:        1.1.8
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
 Source0:        https://launchpad.net/gearmand/1.2/%{version}/+download/gearmand-%{version}.tar.gz
-#Source1:        gearmand.init
+Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  libevent-devel, libuuid-devel, libmemcached-devel, memcached
+%if 0%{?el5}
+BuildRequires:  e2fsprogs-devel
+BuildRequires:  boost141-devel, boost141-thread
+#BuildRequires:  gcc44 gcc44-c++ libstdc++44-devel
+%else
+BuildRequires:  libuuid-devel
 BuildRequires:  boost-devel >= 1.37.0, boost-thread
-BuildRequires:  systemd-units
+%endif
+%if %{_with_sqlite}
+BuildRequires:  sqlite-devel
+%endif
+%if %{_with_tokyocabinet}
+BuildRequires:  tokyocabinet-devel
+%endif
+BuildRequires:  libevent-devel
+BuildRequires:  libmemcached-devel, memcached
+BuildRequires:  gperf
+BuildRequires:  mysql-devel
+BuildRequires:  postgresql-devel
+BuildRequires:  zlib-devel
 
-# Additional support
-BuildRequires: mysql-devel, mysql-libs, sqlite-devel, postgresql-devel, postgresql-libs
-BuildRequires: zlib-devel
-#Requires: mysql-libs, postgresql-libs, zlib
+%if 0%{?_with_systemd}
+BuildRequires: systemd-units
+%endif
+
+# For %%check
+#BuildRequires:  curl-devel
+#%if 0%{?fedora} >= 20 || 0%{?rhel} >= 7
+#BuildRequires:  mariadb-server
+#%else
+#BuildRequires:  mysql-server
+#%endif
 
 # google perftools available only on these
 %ifarch %{ix86} x86_64 ppc
+%if %{_with_gperftools}
 BuildRequires: gperftools-devel
+%endif
 %endif
 Requires(pre):   shadow-utils
 Requires:        procps
 
-# This is actually needed for the %triggerun script but Requires(triggerun)
-# is not valid.  We can use %post because this particular %triggerun script
+%if 0%{?_with_systemd}
+# This is actually needed for the %%triggerun script but Requires(triggerun)
+# is not valid.  We can use %%post because this particular %%triggerun script
 # should fire just after this package is installed.
 Requires(post): systemd-sysv
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
-
-#Patch0: gearmand-0.27-lp914495.patch 
-#Patch1: gearmand-0.28-lp932994.patch
-#Patch2: gearmand-0.31-lp978235.patch
-#Patch3: gearmand-0.33-lp1020778.patch
+%else
+Requires(post):  chkconfig
+Requires(preun): chkconfig, initscripts
+%endif
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -74,14 +115,25 @@ Development headers for %{name}.
 
 %prep
 %setup -q
-#%%patch1 -p1 -b .lp932994
-#%%patch2 -p1 -b .lp978235
-#%%patch3 -p1 -b .lp1020778
 
+%if 0%{?el5}
+  # libgearman-1.0 requires a header that's newer than what we have on EL5.
+  # It looks like it's optional. (If not, we will have to build with gcc44.)
+  sed -i '/include <tr1\/cinttypes>/d' libgearman-1.0/gearman.h
+%endif
 
 %build
-# HACK to work around boost issues.
-export LDFLAGS="$LDFLAGS -lboost_system"
+%if 0%{?el5}
+  # We have to use the parallel version of Boost
+  #export CC='gcc44'
+  #export CXX='gcc44-c++'
+  #export CPPFLAGS="-I%{_includedir}/boost141 -I%{_includedir}/c++/4.4.7"
+  export CPPFLAGS="-I%{_includedir}/boost141"
+  export LDFLAGS="-L%{_libdir}/boost141"
+%else
+  # HACK to work around boost issues.
+  export LDFLAGS="$LDFLAGS -lboost_system"
+%endif
 
 %ifarch ppc64 sparc64
 # no tcmalloc
@@ -90,8 +142,12 @@ export LDFLAGS="$LDFLAGS -lboost_system"
 %configure --disable-static --disable-rpath --enable-tcmalloc
 %endif
 
+%if 0%{?el5}
+# the sed operations may be causing this to fail on EL5
+%else
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+%endif
 make %{_smp_mflags}
 
 
@@ -99,13 +155,23 @@ make %{_smp_mflags}
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman*.la
-#install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
-mkdir -p    %{buildroot}/var/run/gearmand \
-            %{buildroot}%{_unitdir}
 
-# For systemd
-install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
+%if 0%{?_with_systemd}
+  # install systemd unit file
+  mkdir -p %{buildroot}%{_unitdir}
+  install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
+%else
+  # install legacy SysV init script
+  install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
+  mkdir -p %{buildroot}/var/run/gearmand
+%endif
+
+mkdir -p %{buildroot}/var/log
+touch %{buildroot}/var/log/gearmand.log
+
+%check
+#make check
 
 %clean
 rm -rf %{buildroot}
@@ -119,13 +185,31 @@ getent passwd gearmand >/dev/null || \
 exit 0
 
 %post
-%systemd_post gearmand.service
+%if 0%{?_with_systemd}
+  %systemd_post gearmand.service
+%else
+  if [ $1 = 1 ]; then
+    /sbin/chkconfig --add gearmand
+  fi
+%endif
+/bin/touch /var/log/gearmand.log
+
 
 %preun
-%systemd_preun gearmand.service
+%if 0%{?_with_systemd}
+  %systemd_preun gearmand.service
+%else
+  if [ "$1" = 0 ] ; then
+    /sbin/service gearmand stop >/dev/null 2>&1 || :
+    /sbin/chkconfig --del gearmand
+  fi
+  exit 0
+%endif
 
 %postun
-%systemd_postun_with_restart gearmand.service
+%if 0%{?_with_systemd}
+  %systemd_postun_with_restart gearmand.service
+%endif
 
 %post -n libgearman -p /sbin/ldconfig
 
@@ -134,12 +218,21 @@ exit 0
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING README
-%ghost %attr(755,gearmand,gearmand) /var/run/gearmand
+%if 0%{?el5} || 0%{?el6}
+%attr(755,gearmand,gearmand) /var/run/gearmand
+%endif
 %config(noreplace) %{_sysconfdir}/sysconfig/gearmand
 %{_sbindir}/gearmand
 %{_bindir}/gearman
 %{_bindir}/gearadmin
+%{_mandir}/man1/*
+%{_mandir}/man8/*
+%attr(0640,gearmand,gearmand) %config(noreplace) %verify(not md5 size mtime) /var/log/gearmand.log
+%if 0%{?_with_systemd}
 %{_unitdir}/%{name}.service
+%else
+%{_initrddir}/%{name}
+%endif
 
 %files -n libgearman
 %defattr(-,root,root,-)
@@ -155,9 +248,19 @@ exit 0
 %{_libdir}/pkgconfig/gearmand.pc
 %{_libdir}/libgearman.so
 %{_includedir}/libgearman-1.0/
+%{_mandir}/man3/*
 
 
 %changelog
+* Thu Jul 18 2013 Ken Dreyer <ktdreyer@ktdreyer.com> - 1.1.8-1
+- Update to latest upstream release.
+- Add EL5 and EL6 conditionals to unify the spec across all branches.
+- Add mandirs.
+- Add /var/log/gearmand.log.
+- Add tokyocabinet support.
+- Remove commented patches.
+- rpmlint fixes (macros in comments).
+
 * Sun Feb 10 2013 Denis Arnaud <denis.arnaud_fedora@m4x.org> - 1.1.2-3
 - Rebuild for Boost-1.53.0
 
