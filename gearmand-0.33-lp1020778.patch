@@ -1,0 +1,12 @@
+https://bugs.launchpad.net/gearmand/+bug/1020778
+
+--- gearmand-0.33/util/logfile.cc.orig	2012-05-03 22:51:48.000000000 -0500
++++ gearmand-0.33/util/logfile.cc	2012-07-03 00:53:10.153381199 -0500
+@@ -49,6 +49,7 @@
+ #include <sstream>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <unistd.h>
+ 
+ namespace datadifferential {
+ namespace util {
