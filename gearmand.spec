@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -27,6 +27,9 @@ Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+# Fails to build on PPC.
+# See https://bugzilla.redhat.com/987104 and https://bugzilla.redhat.com/987109
+ExcludeArch:    ppc ppc64
 
 %if 0%{?el5}
 BuildRequires:  e2fsprogs-devel
@@ -252,6 +255,9 @@ exit 0
 
 
 %changelog
+* Mon Jul 22 2013 Blake Gardner <blakegardner@cox.net> - 1.1.8-2
+- ExcludeArch ppc ppc64
+
 * Thu Jul 18 2013 Ken Dreyer <ktdreyer@ktdreyer.com> - 1.1.8-1
 - Update to latest upstream release.
 - Add EL5 and EL6 conditionals to unify the spec across all branches.
