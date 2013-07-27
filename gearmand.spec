@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.8
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -255,6 +255,9 @@ exit 0
 
 
 %changelog
+* Sat Jul 27 2013 pmachata@redhat.com - 1.1.8-3
+- Rebuild for boost 1.54.0
+
 * Mon Jul 22 2013 Blake Gardner <blakegardner@cox.net> - 1.1.8-2
 - ExcludeArch ppc ppc64
 
