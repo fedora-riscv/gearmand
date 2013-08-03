@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.8
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -255,6 +255,9 @@ exit 0
 
 
 %changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.8-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Sat Jul 27 2013 pmachata@redhat.com - 1.1.8-3
 - Rebuild for boost 1.54.0
 
