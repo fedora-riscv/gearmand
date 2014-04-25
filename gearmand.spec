@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -260,6 +260,9 @@ exit 0
 
 
 %changelog
+* Fri Apr 25 2014 Ken Dreyer <ktdreyer@ktdreyer.com> - 1.1.12-2
+- Add missing Source0 tarball (oops)
+
 * Fri Apr 25 2014 Ken Dreyer <ktdreyer@ktdreyer.com> - 1.1.12-1
 - Update to latest upstream release
 - Drop Fedora 18 conditional
