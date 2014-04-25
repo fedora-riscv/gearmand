@@ -1,5 +1,5 @@
 # Use systemd unit files on Fedora 18 and above.
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
+%if 0%{?rhel} >= 7
   %global _with_systemd 1
 %endif
 
@@ -15,8 +15,8 @@
 %endif
 
 Name:           gearmand
-Version:        1.1.8
-Release:        4%{?dist}
+Version:        1.1.12
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -101,6 +101,11 @@ Summary:        Development libraries for gearman
 Group:          Development/Libraries
 Provides:       libgearman-1.0 = %{version}-%{release}
 Obsoletes:      libgearman-1.0 < %{version}-%{release}
+%if 0%{?el5}
+# gearman requires uuid_generate_time_safe, which only exists in newer
+# e2fsprogs-libs
+Requires:       e2fsprogs-libs >= 1.39-32
+%endif
 
 %description -n libgearman
 Development libraries for %{name}.
@@ -255,6 +260,12 @@ exit 0
 
 
 %changelog
+* Fri Apr 25 2014 Ken Dreyer <ktdreyer@ktdreyer.com> - 1.1.12-1
+- Update to latest upstream release
+- Drop Fedora 18 conditional
+- Add el5 e2fsprogs-libs minimum version requirement
+- Fix bogus changelog date
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.8-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
@@ -317,7 +328,7 @@ exit 0
 * Mon Apr 23 2012  Remi Collet <remi@fedoraproject.org> - 0.32-2
 - rebuild against libmemcached.so.10
 
-* Tue Apr 18 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.32-1
+* Wed Apr 18 2012 BJ Dierkes <wdierkes@rackspace.com> - 0.32-1
 - Latest sources from upstream.  Release notes here:
   https://launchpad.net/gearmand/trunk/0.32
 - Removed Patch2: gearmand-0.31-lp978235.patch (applied upstream)
