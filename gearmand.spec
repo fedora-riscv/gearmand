@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -260,6 +260,9 @@ exit 0
 
 
 %changelog
+* Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 1.1.12-4
+- Rebuild for boost 1.55.0
+
 * Fri May 23 2014 David Tardon <dtardon@redhat.com> - 1.1.12-3
 - rebuild for boost 1.55.0
 
