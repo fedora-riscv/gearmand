@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -260,6 +260,9 @@ exit 0
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.12-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 1.1.12-4
 - Rebuild for boost 1.55.0
 
