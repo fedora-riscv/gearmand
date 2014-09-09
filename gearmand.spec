@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -26,6 +26,7 @@ Source0:        https://launchpad.net/gearmand/1.2/%{version}/+download/gearmand
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
+Patch0:		gearmand-1.1.12-ppc64le.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # Fails to build on PPC.
 # See https://bugzilla.redhat.com/987104 and https://bugzilla.redhat.com/987109
@@ -123,6 +124,7 @@ Development headers for %{name}.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %if 0%{?el5}
   # libgearman-1.0 requires a header that's newer than what we have on EL5.
@@ -260,6 +262,9 @@ exit 0
 
 
 %changelog
+* Tue Sep 09 2014 Karsten Hopp <karsten@redhat.com> 1.1.12-7
+- fix library path for ppc64le
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.1.12-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
