@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -30,7 +30,7 @@ Patch0:		gearmand-1.1.12-ppc64le.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # Fails to build on PPC.
 # See https://bugzilla.redhat.com/987104 and https://bugzilla.redhat.com/987109
-ExcludeArch:    ppc ppc64
+ExcludeArch:    ppc
 
 %if 0%{?el5}
 BuildRequires:  e2fsprogs-devel
@@ -262,6 +262,9 @@ exit 0
 
 
 %changelog
+* Tue Sep 09 2014 Karsten Hopp <karsten@redhat.com> 1.1.12-8
+- enable ppc64
+
 * Tue Sep 09 2014 Karsten Hopp <karsten@redhat.com> 1.1.12-7
 - fix library path for ppc64le
 
