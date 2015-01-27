@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -262,6 +262,9 @@ exit 0
 
 
 %changelog
+* Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 1.1.12-9
+- Rebuild for boost 1.57.0
+
 * Tue Sep 09 2014 Karsten Hopp <karsten@redhat.com> 1.1.12-8
 - enable ppc64
 
