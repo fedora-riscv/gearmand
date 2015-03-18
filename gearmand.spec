@@ -1,5 +1,5 @@
 # Use systemd unit files on Fedora 18 and above.
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 18
   %global _with_systemd 1
 %endif
 
@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -262,6 +262,10 @@ exit 0
 
 
 %changelog
+* Wed Mar 18 2015 Adam Jackson <ajax@redhat.com> 1.1.12-10
+- Re-add Fedora conditional dropped in 1.1.12-1, which had the (probably)
+  unintended side-effect of reverting Fedora to sysvinit from systemd.
+
 * Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 1.1.12-9
 - Rebuild for boost 1.57.0
 
