@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -262,6 +262,9 @@ exit 0
 
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 1.1.12-11
+- Rebuilt for GCC 5 C++11 ABI change
+
 * Wed Mar 18 2015 Adam Jackson <ajax@redhat.com> 1.1.12-10
 - Re-add Fedora conditional dropped in 1.1.12-1, which had the (probably)
   unintended side-effect of reverting Fedora to sysvinit from systemd.
