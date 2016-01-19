@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        15%{?dist}
+Release:        16%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -66,7 +66,7 @@ BuildRequires: systemd-units
 #%endif
 
 # google perftools available only on these
-%ifarch %{ix86} x86_64 ppc
+%ifarch %{ix86} x86_64 ppc64 ppc64le aarch64 %{arm}
 %if %{_with_gperftools}
 BuildRequires: gperftools-devel
 %endif
@@ -262,6 +262,9 @@ exit 0
 
 
 %changelog
+* Tue Jan 19 2016 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 1.1.12-16
+- gperftools is available on wider selection of architectures - rhbz#1256287
+
 * Thu Aug 27 2015 Jonathan Wakely <jwakely@redhat.com> - 1.1.12-15
 - Rebuilt for Boost 1.59
 
