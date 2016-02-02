@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.12
-Release:        16%{?dist}
+Release:        17%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -147,9 +147,9 @@ Development headers for %{name}.
 
 %ifarch ppc64 sparc64
 # no tcmalloc
-%configure --disable-static --disable-rpath
+%configure --disable-static --disable-rpath --disable-silent-rules
 %else
-%configure --disable-static --disable-rpath --enable-tcmalloc
+%configure --disable-static --disable-rpath --enable-tcmalloc --disable-silent-rules
 %endif
 
 %if 0%{?el5}
@@ -262,6 +262,10 @@ exit 0
 
 
 %changelog
+* Tue Feb 02 2016 Ralf Corsépius <corsepiu@fedoraproject.org> - 1.1.12-17
+- Rebuilt for Boost 1.60
+- Append --disable-silent-rules to %%configure.
+
 * Tue Jan 19 2016 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 1.1.12-16
 - gperftools is available on wider selection of architectures - rhbz#1256287
 
