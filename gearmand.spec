@@ -1,5 +1,5 @@
-# Use systemd unit files on Fedora 18 and above.
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 18
+# Use systemd unit files on RHEL 7 above.
+%if 0%{?rhel} >= 7 || 0%{?fedora}
   %global _with_systemd 1
 %endif
 
@@ -15,14 +15,14 @@
 %endif
 
 Name:           gearmand
-Version:        1.1.12
-Release:        18%{?dist}
+Version:        1.1.14
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
-Source0:        https://launchpad.net/gearmand/1.2/%{version}/+download/gearmand-%{version}.tar.gz
+Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/gearmand-%{version}.tar.gz
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
@@ -54,7 +54,7 @@ BuildRequires:  postgresql-devel
 BuildRequires:  zlib-devel
 
 %if 0%{?_with_systemd}
-BuildRequires: systemd-units
+BuildRequires: systemd
 %endif
 
 # For %%check
@@ -75,13 +75,7 @@ Requires(pre):   shadow-utils
 Requires:        procps
 
 %if 0%{?_with_systemd}
-# This is actually needed for the %%triggerun script but Requires(triggerun)
-# is not valid.  We can use %%post because this particular %%triggerun script
-# should fire just after this package is installed.
-Requires(post): systemd-sysv
-Requires(post): systemd-units
-Requires(preun): systemd-units
-Requires(postun): systemd-units
+%{?systemd_requires}
 %else
 Requires(post):  chkconfig
 Requires(preun): chkconfig, initscripts
@@ -226,8 +220,8 @@ exit 0
 %postun -n libgearman -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
-%doc AUTHORS ChangeLog COPYING README
+%license COPYING
+%doc AUTHORS ChangeLog README
 %if 0%{?el5} || 0%{?el6}
 %attr(755,gearmand,gearmand) /var/run/gearmand
 %endif
@@ -245,14 +239,13 @@ exit 0
 %endif
 
 %files -n libgearman
-%defattr(-,root,root,-)
-%doc COPYING
+%license COPYING
 %{_libdir}/libgearman.so.8
 %{_libdir}/libgearman.so.8.0.0
 
 %files -n libgearman-devel
-%defattr(-,root,root,-)
-%doc AUTHORS ChangeLog COPYING README
+%license COPYING
+%doc AUTHORS ChangeLog README
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/*.h
 %{_libdir}/pkgconfig/gearmand.pc
@@ -262,6 +255,14 @@ exit 0
 
 
 %changelog
+* Sun Jan 08 2017 Ken Dreyer <ktdreyer@ktdreyer.com> - 1.1.14-1
+- Update to 1.1.14
+- Remove reference to old Fedoras
+- New upstream URL
+- Update for latest systemd packaging guidelines
+- Use %%license macro
+- Drop %%defattr macro
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.12-18
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
