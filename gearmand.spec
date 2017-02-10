@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -255,6 +255,9 @@ exit 0
 
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.14-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Sun Jan 08 2017 Ken Dreyer <ktdreyer@ktdreyer.com> - 1.1.14-1
 - Update to 1.1.14
 - Remove reference to old Fedoras
