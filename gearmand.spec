@@ -15,8 +15,8 @@
 %endif
 
 Name:           gearmand
-Version:        1.1.14
-Release:        2%{?dist}
+Version:        1.1.16
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -221,7 +221,7 @@ exit 0
 
 %files
 %license COPYING
-%doc AUTHORS ChangeLog README
+%doc AUTHORS ChangeLog HACKING THANKS
 %if 0%{?el5} || 0%{?el6}
 %attr(755,gearmand,gearmand) /var/run/gearmand
 %endif
@@ -245,7 +245,7 @@ exit 0
 
 %files -n libgearman-devel
 %license COPYING
-%doc AUTHORS ChangeLog README
+%doc AUTHORS ChangeLog HACKING THANKS
 %dir %{_includedir}/libgearman
 %{_includedir}/libgearman/*.h
 %{_libdir}/pkgconfig/gearmand.pc
@@ -255,6 +255,9 @@ exit 0
 
 
 %changelog
+* Sat Jul  1 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.16-1
+- Update to 1.1.16 (BZ#1424779, BZ#1423595, BZ#1464646, BZ#1411067)
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.14-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
