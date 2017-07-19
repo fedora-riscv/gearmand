@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.16
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -255,6 +255,9 @@ exit 0
 
 
 %changelog
+* Wed Jul 19 2017 Jonathan Wakely <jwakely@redhat.com> - 1.1.16-3
+- Rebuilt for s390x binutils bug
+
 * Tue Jul 18 2017 Jonathan Wakely <jwakely@redhat.com> - 1.1.16-2
 - Rebuilt for Boost 1.64
 
