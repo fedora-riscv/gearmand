@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.16
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -255,6 +255,9 @@ exit 0
 
 
 %changelog
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.16-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Wed Jul 19 2017 Jonathan Wakely <jwakely@redhat.com> - 1.1.16-3
 - Rebuilt for s390x binutils bug
 
