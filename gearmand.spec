@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.17
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -48,6 +48,7 @@ BuildRequires:  tokyocabinet-devel
 %endif
 BuildRequires:  libevent-devel
 BuildRequires:  libmemcached-devel, memcached
+BuildRequires:  hiredis-devel
 BuildRequires:  gperf
 BuildRequires:  mysql-devel
 BuildRequires:  postgresql-devel
@@ -255,6 +256,9 @@ exit 0
 
 
 %changelog
+* Tue Sep  5 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.17-2
+- BR hiredis-devel
+
 * Mon Sep  4 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.17-1
 - Update to 1.1.17 (BZ#1475805)
 
