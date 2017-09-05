@@ -15,8 +15,8 @@
 %endif
 
 Name:           gearmand
-Version:        1.1.16
-Release:        5%{?dist}
+Version:        1.1.17
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -26,7 +26,7 @@ Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/
 Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
-Patch0:		gearmand-1.1.12-ppc64le.patch
+Patch0:         gearmand-1.1.12-ppc64le.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # Fails to build on PPC.
 # See https://bugzilla.redhat.com/987104 and https://bugzilla.redhat.com/987109
@@ -255,6 +255,9 @@ exit 0
 
 
 %changelog
+* Mon Sep  4 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.17-1
+- Update to 1.1.17 (BZ#1475805)
+
 * Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.16-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
