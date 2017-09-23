@@ -6,7 +6,7 @@ After=syslog.target network.target
 EnvironmentFile=/etc/sysconfig/gearmand
 User=gearmand
 Type=forking
-ExecStart=/usr/sbin/gearmand -d $OPTIONS
+ExecStart=/usr/sbin/gearmand -d --log-file none --syslog $OPTIONS
 
 [Install]
 WantedBy=multi-user.target

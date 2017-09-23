@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.17
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -50,7 +50,7 @@ BuildRequires:  libevent-devel
 BuildRequires:  libmemcached-devel, memcached
 BuildRequires:  hiredis-devel
 BuildRequires:  gperf
-BuildRequires:  mysql-devel
+BuildRequires:  mariadb-connector-c-devel openssl-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  zlib-devel
 
@@ -173,7 +173,6 @@ install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 %endif
 
 mkdir -p %{buildroot}/var/log
-touch %{buildroot}/var/log/gearmand.log
 
 %check
 #make check
@@ -197,7 +196,6 @@ exit 0
     /sbin/chkconfig --add gearmand
   fi
 %endif
-/bin/touch /var/log/gearmand.log
 
 
 %preun
@@ -232,7 +230,6 @@ exit 0
 %{_bindir}/gearadmin
 %{_mandir}/man1/*
 %{_mandir}/man8/*
-%attr(0640,gearmand,gearmand) %config(noreplace) %verify(not md5 size mtime) /var/log/gearmand.log
 %if 0%{?_with_systemd}
 %{_unitdir}/%{name}.service
 %else
@@ -248,7 +245,7 @@ exit 0
 %license COPYING
 %doc AUTHORS ChangeLog HACKING THANKS
 %dir %{_includedir}/libgearman
-%{_includedir}/libgearman/*.h
+%{_includedir}/libgearman/
 %{_libdir}/pkgconfig/gearmand.pc
 %{_libdir}/libgearman.so
 %{_includedir}/libgearman-1.0/
@@ -256,6 +253,10 @@ exit 0
 
 
 %changelog
+* Sat Sep 23 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.17-3
+- Use mariadb client library (BZ#1493685)
+- Use syslog
+
 * Tue Sep  5 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.17-2
 - BR hiredis-devel
 
