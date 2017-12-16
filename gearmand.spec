@@ -15,8 +15,8 @@
 %endif
 
 Name:           gearmand
-Version:        1.1.17
-Release:        3%{?dist}
+Version:        1.1.18
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -253,6 +253,9 @@ exit 0
 
 
 %changelog
+* Sat Dec 16 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.18-1
+- Update to 1.1.18 (BZ#1524746)
+
 * Sat Sep 23 2017 Robin Lee <cheeselee@fedoraproject.org> - 1.1.17-3
 - Use mariadb client library (BZ#1493685)
 - Use syslog
