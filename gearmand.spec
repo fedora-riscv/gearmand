@@ -176,9 +176,6 @@ mkdir -p %{buildroot}/var/log
 %check
 #make check
 
-%clean
-rm -rf %{buildroot}
-
 
 %pre
 getent group gearmand >/dev/null || groupadd -r gearmand
