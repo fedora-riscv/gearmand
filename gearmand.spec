@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.18
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -249,6 +249,9 @@ exit 0
 
 
 %changelog
+* Mon Feb 19 2018 Robin Lee <cheeselee@fedoraproject.org> - 1.1.18-4
+- rebuild (libevent)
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
