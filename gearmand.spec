@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.18
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -31,6 +31,7 @@ Patch0:         gearmand-1.1.12-ppc64le.patch
 # See https://bugzilla.redhat.com/987104 and https://bugzilla.redhat.com/987109
 ExcludeArch:    ppc
 
+BuildRequires:  gcc-c++
 %if 0%{?el5}
 BuildRequires:  e2fsprogs-devel
 BuildRequires:  boost141-devel, boost141-thread
@@ -249,6 +250,9 @@ exit 0
 
 
 %changelog
+* Sat Mar 10 2018 Robin Lee <cheeselee@fedoraproject.org> - 1.1.18-5
+- BR gcc-c++ for http://fedoraproject.org/wiki/Changes/Remove_GCC_from_BuildRoot
+
 * Mon Feb 19 2018 Robin Lee <cheeselee@fedoraproject.org> - 1.1.18-4
 - rebuild (libevent)
 
