@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.18
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -250,6 +250,9 @@ exit 0
 
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Sat Mar 10 2018 Robin Lee <cheeselee@fedoraproject.org> - 1.1.18-5
 - BR gcc-c++ for http://fedoraproject.org/wiki/Changes/Remove_GCC_from_BuildRoot
 
