@@ -51,7 +51,7 @@ BuildRequires:  libmemcached-devel, memcached
 BuildRequires:  hiredis-devel
 BuildRequires:  gperf
 BuildRequires:  mariadb-connector-c-devel openssl-devel
-BuildRequires:  postgresql-devel
+BuildRequires:  libpq-devel
 BuildRequires:  zlib-devel
 
 %if 0%{?_with_systemd}
