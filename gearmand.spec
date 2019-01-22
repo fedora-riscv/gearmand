@@ -211,9 +211,7 @@ exit 0
   %systemd_postun_with_restart gearmand.service
 %endif
 
-%post -n libgearman -p /sbin/ldconfig
-
-%postun -n libgearman -p /sbin/ldconfig
+%ldconfig_scriptlets -n libgearman
 
 %files
 %license COPYING
