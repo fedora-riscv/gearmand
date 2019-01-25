@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.18
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A distributed job system
 
 Group:          System Environment/Daemons
@@ -248,6 +248,9 @@ exit 0
 
 
 %changelog
+* Fri Jan 25 2019 Jonathan Wakely <jwakely@redhat.com> - 1.1.18-7
+- Rebuilt for Boost 1.69
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
