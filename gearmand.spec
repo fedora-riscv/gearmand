@@ -19,7 +19,6 @@ Version:        1.1.18
 Release:        7%{?dist}
 Summary:        A distributed job system
 
-Group:          System Environment/Daemons
 License:        BSD
 URL:            http://www.gearman.org
 Source0:        https://github.com/gearman/%{name}/releases/download/%{version}/gearmand-%{version}.tar.gz
@@ -94,7 +93,6 @@ communicates.
 
 %package -n libgearman
 Summary:        Development libraries for gearman
-Group:          Development/Libraries
 Provides:       libgearman-1.0 = %{version}-%{release}
 Obsoletes:      libgearman-1.0 < %{version}-%{release}
 %if 0%{?el5}
@@ -109,7 +107,6 @@ Development libraries for %{name}.
 %package -n libgearman-devel
 Summary:        Development headers for libgearman
 Requires:       pkgconfig, libgearman = %{version}-%{release}
-Group:          Development/Libraries
 Requires:       libevent-devel
 Provides:       libgearman-1.0-devel = %{version}-%{release}
 Obsoletes:      libgearman-1.0-devel < %{version}-%{release}
