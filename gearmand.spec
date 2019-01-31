@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.18
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        A distributed job system
 
 License:        BSD
@@ -245,6 +245,9 @@ exit 0
 
 
 %changelog
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Fri Jan 25 2019 Jonathan Wakely <jwakely@redhat.com> - 1.1.18-7
 - Rebuilt for Boost 1.69
 
