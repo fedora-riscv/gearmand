@@ -3,20 +3,20 @@
   %global _with_systemd 1
 %endif
 
-# Skip deps that are too old on EL5.
-%if 0%{?el5}
+# Skip deps that are not met on EL8.
+%if 0%{?el8}
   %global _with_gperftools 0
-  %global _with_sqlite 0
-  %global _with_tokyocabinet 0
+  %global _with_hiredis 0
 %else
   %global _with_gperftools 1
-  %global _with_sqlite 1
-  %global _with_tokyocabinet 1
+  %global _with_hiredis 1
 %endif
+%global _with_tokyocabinet 1
+%global _with_sqlite 1
 
 Name:           gearmand
 Version:        1.1.18
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        A distributed job system
 
 License:        BSD
@@ -31,14 +31,8 @@ Patch0:         gearmand-1.1.12-ppc64le.patch
 ExcludeArch:    ppc
 
 BuildRequires:  gcc-c++
-%if 0%{?el5}
-BuildRequires:  e2fsprogs-devel
-BuildRequires:  boost141-devel, boost141-thread
-#BuildRequires:  gcc44 gcc44-c++ libstdc++44-devel
-%else
 BuildRequires:  libuuid-devel
 BuildRequires:  boost-devel >= 1.37.0, boost-thread
-%endif
 %if %{_with_sqlite}
 BuildRequires:  sqlite-devel
 %endif
@@ -47,7 +41,9 @@ BuildRequires:  tokyocabinet-devel
 %endif
 BuildRequires:  libevent-devel
 BuildRequires:  libmemcached-devel, memcached
+%if %{_with_hiredis}
 BuildRequires:  hiredis-devel
+%endif
 BuildRequires:  gperf
 BuildRequires:  mariadb-connector-c-devel openssl-devel
 BuildRequires:  libpq-devel
@@ -95,11 +91,6 @@ communicates.
 Summary:        Development libraries for gearman
 Provides:       libgearman-1.0 = %{version}-%{release}
 Obsoletes:      libgearman-1.0 < %{version}-%{release}
-%if 0%{?el5}
-# gearman requires uuid_generate_time_safe, which only exists in newer
-# e2fsprogs-libs
-Requires:       e2fsprogs-libs >= 1.39-32
-%endif
 
 %description -n libgearman
 Development libraries for %{name}.
@@ -118,24 +109,9 @@ Development headers for %{name}.
 %setup -q
 %patch0 -p1
 
-%if 0%{?el5}
-  # libgearman-1.0 requires a header that's newer than what we have on EL5.
-  # It looks like it's optional. (If not, we will have to build with gcc44.)
-  sed -i '/include <tr1\/cinttypes>/d' libgearman-1.0/gearman.h
-%endif
-
 %build
-%if 0%{?el5}
-  # We have to use the parallel version of Boost
-  #export CC='gcc44'
-  #export CXX='gcc44-c++'
-  #export CPPFLAGS="-I%{_includedir}/boost141 -I%{_includedir}/c++/4.4.7"
-  export CPPFLAGS="-I%{_includedir}/boost141"
-  export LDFLAGS="-L%{_libdir}/boost141"
-%else
-  # HACK to work around boost issues.
-  export LDFLAGS="$LDFLAGS -lboost_system"
-%endif
+# HACK to work around boost issues.
+export LDFLAGS="$LDFLAGS -lboost_system"
 
 %ifarch ppc64 sparc64
 # no tcmalloc
@@ -144,12 +120,8 @@ Development headers for %{name}.
 %configure --disable-static --disable-rpath --enable-tcmalloc --disable-silent-rules
 %endif
 
-%if 0%{?el5}
-# the sed operations may be causing this to fail on EL5
-%else
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-%endif
 make %{_smp_mflags}
 
 
@@ -213,7 +185,7 @@ exit 0
 %files
 %license COPYING
 %doc AUTHORS ChangeLog HACKING THANKS
-%if 0%{?el5} || 0%{?el6}
+%if 0%{?el6}
 %attr(755,gearmand,gearmand) /var/run/gearmand
 %endif
 %config(noreplace) %{_sysconfdir}/sysconfig/gearmand
@@ -245,6 +217,10 @@ exit 0
 
 
 %changelog
+* Tue Oct  1 2019 Robin Lee <cheeselee@fedoraproject.org> - 1.1.18-10
+- Support building for EL8 (BZ#1756966)
+- Remove EL5 support
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
