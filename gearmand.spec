@@ -16,7 +16,7 @@
 
 Name:           gearmand
 Version:        1.1.18
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        A distributed job system
 
 License:        BSD
@@ -217,6 +217,9 @@ exit 0
 
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Tue Oct  1 2019 Robin Lee <cheeselee@fedoraproject.org> - 1.1.18-10
 - Support building for EL8 (BZ#1756966)
 - Remove EL5 support
