@@ -15,8 +15,8 @@
 %global _with_sqlite 1
 
 Name:           gearmand
-Version:        1.1.18
-Release:        11%{?dist}
+Version:        1.1.19.1
+Release:        1%{?dist}
 Summary:        A distributed job system
 
 License:        BSD
@@ -26,11 +26,13 @@ Source1:        gearmand.init
 Source2:        gearmand.sysconfig
 Source3:        gearmand.service
 Patch0:         gearmand-1.1.12-ppc64le.patch
+Patch1:         https://github.com/gearman/gearmand/pull/273.patch
 # Fails to build on PPC.
 # See https://bugzilla.redhat.com/987104 and https://bugzilla.redhat.com/987109
 ExcludeArch:    ppc
 
 BuildRequires:  gcc-c++
+BuildRequires:  chrpath
 BuildRequires:  libuuid-devel
 BuildRequires:  boost-devel >= 1.37.0, boost-thread
 %if %{_with_sqlite}
@@ -54,12 +56,8 @@ BuildRequires: systemd
 %endif
 
 # For %%check
+# https://github.com/gearman/gearmand/issues/278
 #BuildRequires:  curl-devel
-#%if 0%{?fedora} >= 20 || 0%{?rhel} >= 7
-#BuildRequires:  mariadb-server
-#%else
-#BuildRequires:  mysql-server
-#%endif
 
 # google perftools available only on these
 %ifarch %{ix86} x86_64 ppc64 ppc64le aarch64 %{arm}
@@ -108,27 +106,18 @@ Development headers for %{name}.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
-# HACK to work around boost issues.
-export LDFLAGS="$LDFLAGS -lboost_system"
+%configure --disable-static --disable-silent-rules --enable-ssl
 
-%ifarch ppc64 sparc64
-# no tcmalloc
-%configure --disable-static --disable-rpath --disable-silent-rules
-%else
-%configure --disable-static --disable-rpath --enable-tcmalloc --disable-silent-rules
-%endif
-
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{_smp_mflags}
 
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 rm -v %{buildroot}%{_libdir}/libgearman*.la
+chrpath --delete %{buildroot}%{_bindir}/gearman
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 
 %if 0%{?_with_systemd}
@@ -141,10 +130,9 @@ install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
   mkdir -p %{buildroot}/var/run/gearmand
 %endif
 
-mkdir -p %{buildroot}/var/log
 
 %check
-#make check
+make test
 
 
 %pre
@@ -217,6 +205,13 @@ exit 0
 
 
 %changelog
+* Tue Feb 18 2020 Robin Lee <cheeselee@fedoraproject.org> - 1.1.19.1-1
+- Update to 1.1.19.1 (RHBZ#1801575)
+- Enable SSL support
+- Enable tests
+- Change to use chrpath to remove rpath, since patching libtool will fail to run tests
+- Add patch to fix crashing of tests
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 

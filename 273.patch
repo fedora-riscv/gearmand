@@ -1,0 +1,50 @@
+From d6507e52adcf851d8888b93f9905f0fad1052af2 Mon Sep 17 00:00:00 2001
+From: Robin Lee <cheeselee@fedoraproject.org>
+Date: Sun, 16 Feb 2020 02:37:42 +0800
+Subject: [PATCH] Fix crashing of tests when '-Wp,-D_GLIBCXX_ASSERTIONS' is
+ given
+
+If 'vec' is a vector, calling 'vec[0]' will crash the program if
+'vec' is empty and '-Wp,-D_GLIBCXX_ASSERTIONS' given in CXXFLAGS.
+
+Fixes https://github.com/gearman/gearmand/issues/272
+---
+ libtest/cmdline.h | 4 ++--
+ tests/hostile.cc  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libtest/cmdline.h b/libtest/cmdline.h
+index 692363f6..3503bada 100644
+--- a/libtest/cmdline.h
++++ b/libtest/cmdline.h
+@@ -153,7 +153,7 @@ class Application {
+ 
+   const char* stdout_c_str() const
+   {
+-    return &_stdout_buffer[0];
++    return _stdout_buffer.size() ? &_stdout_buffer[0] : NULL;
+   }
+ 
+   libtest::vchar_t stderr_result() const
+@@ -163,7 +163,7 @@ class Application {
+ 
+   const char* stderr_c_str() const
+   {
+-    return &_stderr_buffer[0];
++    return _stderr_buffer.size() ? &_stderr_buffer[0] : NULL;
+   }
+ 
+   size_t stderr_result_length() const
+diff --git a/tests/hostile.cc b/tests/hostile.cc
+index c4c0487d..c7686206 100644
+--- a/tests/hostile.cc
++++ b/tests/hostile.cc
+@@ -136,7 +136,7 @@ extern "C" {
+         gearman_return_t rc;
+         void *value= gearman_client_do(&client, WORKER_FUNCTION_NAME,
+                                        NULL,
+-                                       &payload[0], 
++                                       payload.size() ? &payload[0] : NULL,
+                                        payload.size() ? random() % payload.size() : 0,
+                                        NULL, &rc);
+ 
