@@ -1,19 +1,3 @@
-# Use systemd unit files on RHEL 7 above.
-%if 0%{?rhel} >= 7 || 0%{?fedora}
-  %global _with_systemd 1
-%endif
-
-# Skip deps that are not met on EL8.
-%if 0%{?el8}
-  %global _with_gperftools 0
-  %global _with_hiredis 0
-%else
-  %global _with_gperftools 1
-  %global _with_hiredis 1
-%endif
-%global _with_tokyocabinet 1
-%global _with_sqlite 1
-
 Name:           gearmand
 Version:        1.1.19.1
 Release:        1%{?dist}
@@ -35,25 +19,16 @@ BuildRequires:  gcc-c++
 BuildRequires:  chrpath
 BuildRequires:  libuuid-devel
 BuildRequires:  boost-devel >= 1.37.0, boost-thread
-%if %{_with_sqlite}
 BuildRequires:  sqlite-devel
-%endif
-%if %{_with_tokyocabinet}
 BuildRequires:  tokyocabinet-devel
-%endif
 BuildRequires:  libevent-devel
 BuildRequires:  libmemcached-devel, memcached
-%if %{_with_hiredis}
 BuildRequires:  hiredis-devel
-%endif
 BuildRequires:  gperf
 BuildRequires:  mariadb-connector-c-devel openssl-devel
 BuildRequires:  libpq-devel
 BuildRequires:  zlib-devel
-
-%if 0%{?_with_systemd}
-BuildRequires: systemd
-%endif
+BuildRequires:  systemd
 
 # For %%check
 # https://github.com/gearman/gearmand/issues/278
@@ -61,19 +36,11 @@ BuildRequires: systemd
 
 # google perftools available only on these
 %ifarch %{ix86} x86_64 ppc64 ppc64le aarch64 %{arm}
-%if %{_with_gperftools}
-BuildRequires: gperftools-devel
+BuildRequires:  gperftools-devel
 %endif
-%endif
-Requires(pre):   shadow-utils
-Requires:        procps
-
-%if 0%{?_with_systemd}
+Requires(pre):  shadow-utils
+Requires:       procps
 %{?systemd_requires}
-%else
-Requires(post):  chkconfig
-Requires(preun): chkconfig, initscripts
-%endif
 
 %description
 Gearman provides a generic framework to farm out work to other machines
@@ -120,15 +87,9 @@ rm -v %{buildroot}%{_libdir}/libgearman*.la
 chrpath --delete %{buildroot}%{_bindir}/gearman
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 
-%if 0%{?_with_systemd}
-  # install systemd unit file
-  mkdir -p %{buildroot}%{_unitdir}
-  install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
-%else
-  # install legacy SysV init script
-  install -p -D -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/gearmand
-  mkdir -p %{buildroot}/var/run/gearmand
-%endif
+# install systemd unit file
+mkdir -p %{buildroot}%{_unitdir}
+install -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
 
 
 %check
@@ -145,50 +106,27 @@ getent passwd gearmand >/dev/null || \
 exit 0
 
 %post
-%if 0%{?_with_systemd}
-  %systemd_post gearmand.service
-%else
-  if [ $1 = 1 ]; then
-    /sbin/chkconfig --add gearmand
-  fi
-%endif
+%systemd_post gearmand.service
 
 
 %preun
-%if 0%{?_with_systemd}
-  %systemd_preun gearmand.service
-%else
-  if [ "$1" = 0 ] ; then
-    /sbin/service gearmand stop >/dev/null 2>&1 || :
-    /sbin/chkconfig --del gearmand
-  fi
-  exit 0
-%endif
+%systemd_preun gearmand.service
 
 %postun
-%if 0%{?_with_systemd}
-  %systemd_postun_with_restart gearmand.service
-%endif
+%systemd_postun_with_restart gearmand.service
 
 %ldconfig_scriptlets -n libgearman
 
 %files
 %license COPYING
 %doc AUTHORS ChangeLog HACKING THANKS
-%if 0%{?el6}
-%attr(755,gearmand,gearmand) /var/run/gearmand
-%endif
 %config(noreplace) %{_sysconfdir}/sysconfig/gearmand
 %{_sbindir}/gearmand
 %{_bindir}/gearman
 %{_bindir}/gearadmin
 %{_mandir}/man1/*
 %{_mandir}/man8/*
-%if 0%{?_with_systemd}
 %{_unitdir}/%{name}.service
-%else
-%{_initrddir}/%{name}
-%endif
 
 %files -n libgearman
 %license COPYING
@@ -212,6 +150,8 @@ exit 0
 - Enable SSL support
 - Change to use chrpath to remove rpath, since patching libtool will fail to run tests
 - Add patch to fix crashing of tests
+- Remove EL8 swithes since all BRs are met in EPEL8
+- Remove EL6 swithes since it no longer builds
 
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.18-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
