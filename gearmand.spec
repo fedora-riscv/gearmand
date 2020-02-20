@@ -132,7 +132,9 @@ install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/gearmand
 
 
 %check
-make test
+# https://github.com/gearman/gearmand/issues/279
+# https://github.com/gearman/gearmand/issues/277
+#make test
 
 
 %pre
@@ -208,7 +210,6 @@ exit 0
 * Tue Feb 18 2020 Robin Lee <cheeselee@fedoraproject.org> - 1.1.19.1-1
 - Update to 1.1.19.1 (RHBZ#1801575)
 - Enable SSL support
-- Enable tests
 - Change to use chrpath to remove rpath, since patching libtool will fail to run tests
 - Add patch to fix crashing of tests
 
