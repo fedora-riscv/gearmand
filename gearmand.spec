@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        1.1.19.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A distributed job system
 
 License:        BSD
@@ -145,6 +145,9 @@ exit 0
 
 
 %changelog
+* Thu May 28 2020 Jonathan Wakely <jwakely@redhat.com> - 1.1.19.1-2
+- Rebuilt for Boost 1.73
+
 * Tue Feb 18 2020 Robin Lee <cheeselee@fedoraproject.org> - 1.1.19.1-1
 - Update to 1.1.19.1 (RHBZ#1801575)
 - Enable SSL support
