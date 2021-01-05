@@ -38,6 +38,7 @@ BuildRequires:  systemd
 %ifarch %{ix86} x86_64 ppc64 ppc64le aarch64 %{arm}
 BuildRequires:  gperftools-devel
 %endif
+BuildRequires: make
 Requires(pre):  shadow-utils
 Requires:       procps
 %{?systemd_requires}
