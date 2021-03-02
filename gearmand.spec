@@ -1,6 +1,6 @@
 Name:           gearmand
 Version:        1.1.19.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        A distributed job system
 
 License:        BSD
@@ -146,6 +146,10 @@ exit 0
 
 
 %changelog
+* Tue Mar 02 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.1.19.1-8
+- Rebuilt for updated systemd-rpm-macros
+  See https://pagure.io/fesco/issue/2583.
+
 * Mon Feb 08 2021 Pavel Raiskup <praiskup@redhat.com> - 1.1.19.1-7
 - rebuild for libpq ABI fix rhbz#1908268
 
