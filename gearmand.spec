@@ -23,6 +23,9 @@ BuildRequires:  sqlite-devel
 BuildRequires:  tokyocabinet-devel
 BuildRequires:  libevent-devel
 BuildRequires:  libmemcached-devel, memcached
+# https://src.fedoraproject.org/rpms/libmemcached-awesome/pull-request/1
+# libmemcached-awesome-devel needs cyrus-sasl-devel
+BuildRequires:  cyrus-sasl-devel
 BuildRequires:  hiredis-devel
 BuildRequires:  gperf
 BuildRequires:  mariadb-connector-c-devel openssl-devel
