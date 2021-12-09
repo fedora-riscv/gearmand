@@ -26,7 +26,10 @@ BuildRequires:  libmemcached-devel, memcached
 # https://src.fedoraproject.org/rpms/libmemcached-awesome/pull-request/1
 # libmemcached-awesome-devel needs cyrus-sasl-devel
 BuildRequires:  cyrus-sasl-devel
+%if 0%{?rhel} < 9
+# not available in EPEL 9 yet
 BuildRequires:  hiredis-devel
+%endif
 BuildRequires:  gperf
 BuildRequires:  mariadb-connector-c-devel openssl-devel
 BuildRequires:  libpq-devel
@@ -39,7 +42,10 @@ BuildRequires:  systemd
 
 # google perftools available only on these
 %ifarch %{ix86} x86_64 ppc64 ppc64le aarch64 %{arm}
+%if 0%{?rhel} < 9
+# not available in EPEL 9 yet
 BuildRequires:  gperftools-devel
+%endif
 %endif
 BuildRequires: make
 Requires(pre):  shadow-utils
