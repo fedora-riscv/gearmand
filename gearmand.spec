@@ -87,7 +87,7 @@ Development headers for %{name}.
 
 %build
 %configure --disable-static --disable-silent-rules --enable-ssl
-
+sed -i 's/ DRIZZLED_BINARY .*/ DRIZZLED_BINARY ""/' gear_config.h
 make %{_smp_mflags}
 
 
