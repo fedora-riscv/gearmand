@@ -1,0 +1,11 @@
+--- gearmand-1.1.20/configure	2023-08-09 20:09:29.584904366 +0800
++++ gearmand-1.1.20/configure	2023-08-09 20:09:40.580105774 +0800
+@@ -17678,7 +17678,7 @@
+                         libsubdirs="lib"
+     ax_arch=`uname -m`
+     case $ax_arch in
+-      x86_64|ppc64*|s390x|sparc64|aarch64)
++      x86_64|ppc64*|s390x|sparc64|aarch64|riscv64)
+         libsubdirs="lib64 lib lib64"
+         ;;
+     esac
